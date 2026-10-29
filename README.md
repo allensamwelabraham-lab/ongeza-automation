@@ -111,6 +111,7 @@ python -m tools.run_module --app ongeza --all                      # modules zot
 python -m tools.run_module --app ongeza --all --from 1 --to 40     # kwa awamu (namba za --list)
 python -m tools.run_module --app ongeza --all --from 41 --to 100
 python -m tools.run_module --app ongeza --all --include-slow       # pamoja na slow
+python -m tools.run_module --app ongeza --all --include-reports    # pamoja na kurasa za reports (zinarukwa kwa default)
 python -m tools.run_module --app ongeza --all --group Worker       # kundi moja la menu tu
 python -m tools.run_module --app ongeza --all --failed --crud      # rudia zilizofail run iliyopita tu
 python -m tools.run_module --app ongeza --all --only 6,40,116-120  # namba hizi za --list tu

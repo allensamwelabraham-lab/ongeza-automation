@@ -61,7 +61,7 @@ CASES = {
     "test_columns": (
         "Columns za table zipo",
         "1. Fungua module\n2. Soma vichwa vya table",
-        "Columns zote zinazotarajiwa zinaonekana",
+        "Columns zinazoonyeshwa na list page zina majina, hazijirudii, na kila row ina cell ya kila column",
     ),
     "test_records": (
         "Table inaonyesha records",
@@ -169,7 +169,17 @@ def load_all(app_key):
     path = modules_file(app_key)
     if not path.exists():
         sys.exit(f"modules/{app_key}.json haipo. Endesha: python -m tools.discover --app {app_key}")
-    return json.loads(path.read_text())["modules"]
+    data = json.loads(path.read_text())
+    try:
+        age = (datetime.now() - datetime.fromisoformat(data.get("discovered_at", ""))).days
+    except ValueError:
+        age = None
+    if age is not None and age > 14 and not getattr(load_all, "warned", False):
+        # Menu ya app ikibadilika, orodha ya zamani inatest kurasa zisizo kwenye menu tena
+        load_all.warned = True
+        print(f"TAHADHARI: modules/{app_key}.json ina siku {age}. Kama menu ya app imebadilika, "
+              f"isasishe kwanza: python -m tools.discover --app {app_key} --workers 2")
+    return data["modules"]
 
 
 def print_list(app_key, modules):
@@ -232,7 +242,7 @@ TEST_ALIASES = {
     "edit": "test_edit_form_saves", "update": "test_edit_form_saves",
     "add": "test_create_form_saves", "create": "test_create_form_saves", "crud": None,
     "buttons": "test_all_buttons", "sort": "test_sort", "filter": "test_filter_finds_row or test_filter_no_match",
-    "view": "test_view", "page": "test_page_loads", "pagination": "test_pagination",
+    "view": "test_view", "read": "test_view", "empty": "test_create_form_rejects_empty", "page": "test_page_loads", "pagination": "test_pagination",
 }
 
 
@@ -241,7 +251,9 @@ def parse_tests(text):
     tests = []
     for word in (w.strip().lower() for w in text.split(",") if w.strip()):
         if word == "crud":
-            tests += ["test_create_form_saves", "test_edit_form_saves"]
+            # Kipaumbele cha kila module: Create (fomu tupu + iliyojazwa), Read (View), Update (Edit)
+            tests += ["test_create_form_rejects_empty", "test_create_form_saves", "test_view",
+                      "test_edit_form_saves"]
         elif word in TEST_ALIASES:
             tests += TEST_ALIASES[word].split(" or ")
         elif word.startswith("test_") and word in CASES:
@@ -289,6 +301,10 @@ def parse_results(xml_path, module, app_key):
             if node is not None:
                 status = label
                 message = _clean(node.get("message") or node.text)
+                if status == "FAIL" and message.startswith("selenium.common.exceptions."):
+                    # Browser imekwama/muda umeisha kabla ya kufika kwenye ukaguzi: si kosa la app
+                    status = "ERROR"
+                    message = "Test haikumaliza (tatizo la browser au muda): " + message.split(".")[-1]
                 break
 
         title, steps, expected = CASES.get(func, (func.replace("test_", "").replace("_", " ").capitalize(), "", ""))
@@ -458,6 +474,11 @@ th {{ background: #f6f8fa; }}
     return total, bad
 
 
+def is_report(module):
+    text = (module["name"] + " " + module["path"]).lower()
+    return "report" in text or "summary" in text or "chart" in text
+
+
 def in_group(module, group):
     """'Customer' inachukua 'Customer > ...' lakini si 'Customer Service > ...'"""
     if not group:
@@ -476,6 +497,12 @@ def run_all(args, app, modules):
         chosen = [(n, m) for n, m in numbered if first <= n <= last
                   and (args.include_slow or not m.get("skip"))
                   and m["name"].lower().startswith(args.group.lower().strip())]
+    if not (args.include_reports or args.only):
+        # Kurasa za reports zinachukua muda mrefu sana kufunguka: zinarukwa isipokuwa --include-reports
+        reports = [m for _, m in chosen if is_report(m)]
+        chosen = [(n, m) for n, m in chosen if not is_report(m)]
+        if reports:
+            print(f"Modules za reports {len(reports)} zimerukwa (ongeza --include-reports kuzitest)")
     base_dir = REPORTS_DIR / "modules" / args.app
     if args.only:
         # k.m. --only 6,40,116-120
@@ -553,6 +580,8 @@ def main():
     parser.add_argument("--to", type=int, help="na --all: ishia namba hii ya --list")
     parser.add_argument("--group", help="na --all: modules za kundi moja tu, k.m. 'Worker' au 'Stock > Items'")
     parser.add_argument("--include-slow", action="store_true", help="na --all: endesha pia modules za slow")
+    parser.add_argument("--include-reports", action="store_true",
+                        help="na --all: test pia kurasa za reports (zinachukua muda mrefu)")
     parser.add_argument("--workers", type=int, default=1, help="browsers sambamba (staging: usizidi 2)")
     parser.add_argument("--crud", action="store_true", help="endesha pia tests zinazounda data (AUTO)")
     parser.add_argument("--tests", help="na --all au --module: aina hizi za tests tu, k.m. 'edit' au 'add,edit' au 'sort'; "
@@ -586,6 +615,9 @@ def main():
 
 
 def _run(args):
+    if args.tests and {w.strip().lower() for w in args.tests.split(",")} & {
+            "crud", "add", "create", "edit", "update", "empty"}:
+        args.crud = True  # tests za kusave/kuedit zinaruka bila --crud
     if args.buttons or (args.tests and "buttons" in args.tests.lower()):
         os.environ["RUN_BUTTONS"] = "1"
 

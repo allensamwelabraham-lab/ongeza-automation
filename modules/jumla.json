@@ -1,37 +1,36 @@
 {
   "app": "JUMLA",
   "base_url": "https://jumla.ongeza.net",
-  "discovered_at": "2026-10-09T07:53:33",
+  "discovered_at": "2026-10-27T09:14:45",
   "modules": [
     {
       "id": "crud_stockistorder_indexall",
-      "name": "Agro > Stockist Machinery Orders",
+      "name": "AGRO > Stockist Machinery Orders",
       "path": "/crud/stockistorder/indexall",
       "final_url": "/crud/stockistorder/indexall",
-      "load_seconds": 3.9,
+      "load_seconds": 58.2,
       "error": null,
       "kind": "vue",
       "heading": "Stockist Agri Machinery Orders",
       "columns": [
         "ID",
-        "ORDER NUMBER",
+        "ORDER NO",
         "CUSTOMER",
         "PHONE",
-        "CUSTOMER TYPE",
         "STATES",
-        "TOTAL ITEM",
-        "TOTAL QUANTITY",
-        "TOTAL AMOUNT",
+        "QUANTITY",
+        "TRACTOR",
+        "AMOUNT",
         "PAID AMOUNT",
         "BALANCE",
         "BALANCE STATUS",
         "ORDER TYPE",
         "WAREHOUSE",
-        "FIRST ORDER DATE",
-        "LATEST ORDER DATE",
+        "FIRST ORDER",
+        "LATEST ORDER",
         "ACTIONS"
       ],
-      "total": 210,
+      "total": 166,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -83,10 +82,22 @@
           "type": "text"
         },
         {
-          "label": "Customer Type",
-          "name": "customer_type_id",
+          "label": "Order Type",
+          "name": "customer_order_type_id",
           "tag": "select",
           "type": "select-one"
+        },
+        {
+          "label": "Creditor",
+          "name": "creditor",
+          "tag": "select",
+          "type": "select-multiple"
+        },
+        {
+          "label": "Creditor",
+          "name": "Creditor",
+          "tag": "input",
+          "type": "search"
         }
       ],
       "has_pagination": false,
@@ -96,10 +107,10 @@
     },
     {
       "id": "crud_stockistorder_index",
-      "name": "Agro > Stockist Credit Order",
+      "name": "AGRO > Stockist Credit Order",
       "path": "/crud/stockistorder/index",
       "final_url": "/crud/stockistorder/index",
-      "load_seconds": 3.0,
+      "load_seconds": 3.5,
       "error": null,
       "kind": "vue",
       "heading": "Stockist Credit Orders",
@@ -121,7 +132,7 @@
         "LATEST ORDER DATE",
         "ACTIONS"
       ],
-      "total": 114,
+      "total": 119,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -186,10 +197,10 @@
     },
     {
       "id": "crud_stockistloan_index",
-      "name": "Agro > Stockist Loans",
+      "name": "AGRO > Stockist Loans",
       "path": "/crud/stockistloan/index",
       "final_url": "/crud/stockistloan/index",
-      "load_seconds": 1.9,
+      "load_seconds": 2.0,
       "error": null,
       "kind": "vue",
       "heading": "Stockist Loan",
@@ -198,15 +209,17 @@
         "CUSTOMER NAME",
         "SHOP NAME",
         "CUSTOMER TYPE",
-        "GUARANTEE START DATE",
-        "GUARANTEE END DATE",
+        "GUARANTEE START",
+        "GUARANTEE END",
         "CREDIT LIMIT AMOUNT",
         "LOAN AMOUNT USED",
         "REMAINING",
         "LOAN STATUS",
+        "CREDITOR",
+        "IS VALID",
         "ACTIONS"
       ],
-      "total": 123,
+      "total": 131,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -272,15 +285,23 @@
           "name": "",
           "placeholder": "Description",
           "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
+          "id": "creditor",
+          "name": "",
+          "placeholder": "",
+          "required": false
         }
       ]
     },
     {
       "id": "crud_lpoorder_index",
-      "name": "Agro > Franchise LPO",
+      "name": "AGRO > Franchise LPO",
       "path": "/crud/lpoorder/index",
       "final_url": "/crud/lpoorder/index",
-      "load_seconds": 1.7,
+      "load_seconds": 1.9,
       "error": null,
       "kind": "vue",
       "heading": "Local Purchase Order",
@@ -298,7 +319,7 @@
         "ORGANIZATION",
         "ACTIONS"
       ],
-      "total": 534,
+      "total": 598,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -338,10 +359,10 @@
     },
     {
       "id": "crud_stockistorder_credit_timeline",
-      "name": "Agro > Credit Orders Timelines",
+      "name": "AGRO > Credit Orders Timelines",
       "path": "/crud/stockistorder/credit-timeline",
       "final_url": "/crud/stockistorder/credit-timeline",
-      "load_seconds": 10.1,
+      "load_seconds": 12.0,
       "error": null,
       "kind": "vue",
       "heading": "CREDIT ORDERS TIMELINES",
@@ -356,7 +377,7 @@
         "ACTIONS"
       ],
       "total": 1,
-      "rows": 1153,
+      "rows": 1212,
       "sort_keys": [],
       "filters": [
         {
@@ -397,10 +418,10 @@
     },
     {
       "id": "crud_ongezastockist_index2",
-      "name": "Agro > Wholesale > Stockist > All stockist",
+      "name": "AGRO > Wholesale > Stockist > All stockist",
       "path": "/crud/ongezastockist/index2",
       "final_url": "/crud/ongezastockist/index2",
-      "load_seconds": 2.1,
+      "load_seconds": 2.2,
       "error": null,
       "kind": "vue",
       "heading": "",
@@ -414,7 +435,7 @@
         "CREATED DATE",
         "ACTIONS"
       ],
-      "total": 3064,
+      "total": 3214,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -512,10 +533,10 @@
     },
     {
       "id": "crud_ongezastockist_salesreport",
-      "name": "Agro > Wholesale > Stockist > Stockist Report",
+      "name": "AGRO > Wholesale > Stockist > Stockist Report",
       "path": "/crud/ongezastockist/salesreport",
       "final_url": "/crud/ongezastockist/salesreport",
-      "load_seconds": 16.8,
+      "load_seconds": 6.3,
       "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
@@ -531,10 +552,10 @@
     },
     {
       "id": "report_default_agrowholesalesummary",
-      "name": "Agro > Wholesale > Wholesale Reports > Agro Wholesale Summary",
+      "name": "AGRO > Wholesale > Wholesale Reports > Agro Wholesale Summary",
       "path": "/report/default/agrowholesalesummary?itemtype=2&category=2",
       "final_url": "/report/default/agrowholesalesummary?itemtype=2&category=2",
-      "load_seconds": 22.4,
+      "load_seconds": 6.5,
       "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
@@ -550,10 +571,10 @@
     },
     {
       "id": "crud_customerorder_index",
-      "name": "Agro > Customer Orders > All Orders",
+      "name": "AGRO > Customer Orders > All Orders",
       "path": "/crud/customerorder/index?workerid=",
       "final_url": "/crud/customerorder/index?workerid=",
-      "load_seconds": 10.5,
+      "load_seconds": 19.6,
       "error": null,
       "kind": "vue",
       "heading": "Customer Orders",
@@ -573,7 +594,7 @@
         "ORDER TYPE",
         "ACTIONS"
       ],
-      "total": 124625,
+      "total": 129287,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -663,10 +684,10 @@
     },
     {
       "id": "crud_customerorder_paidcustomerorder",
-      "name": "Agro > Customer Orders > Paid Orders",
+      "name": "AGRO > Customer Orders > Paid Orders",
       "path": "/crud/customerorder/paidcustomerorder?workerid=",
       "final_url": "/crud/customerorder/paidcustomerorder?workerid=",
-      "load_seconds": 13.2,
+      "load_seconds": 9.2,
       "error": null,
       "kind": "grid",
       "heading": "PAID CUSTOMER ORDERS",
@@ -681,8 +702,8 @@
         "state",
         "Created Date"
       ],
-      "total": 46,
-      "rows": 20,
+      "total": 6,
+      "rows": 6,
       "sort_keys": [
         "id",
         "customerName",
@@ -729,17 +750,17 @@
           "type": "text"
         }
       ],
-      "has_pagination": true,
+      "has_pagination": false,
       "view_href": null,
       "vue_view": false,
       "add_button": null
     },
     {
       "id": "report_default_seedsummary",
-      "name": "Agro > Agro Reports > Seed Reports > Seed Summary",
+      "name": "AGRO > Agro Reports > Seed Reports > Seed Summary",
       "path": "/report/default/seedsummary",
       "final_url": "/report/default/seedsummary",
-      "load_seconds": 19.6,
+      "load_seconds": 7.4,
       "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
@@ -755,10 +776,10 @@
     },
     {
       "id": "crud_sale_seedcullativereport",
-      "name": "Agro > Agro Reports > Seed Reports > Seed Cumulative Report",
+      "name": "AGRO > Agro Reports > Seed Reports > Seed Cumulative Report",
       "path": "/crud/sale/seedcullativereport",
       "final_url": "/crud/sale/seedcullativereport",
-      "load_seconds": 23.6,
+      "load_seconds": 21.4,
       "error": null,
       "kind": "page",
       "heading": "SEED SALES PER DISTRICT (LAST 14 DAYS)",
@@ -774,10 +795,10 @@
     },
     {
       "id": "crud_sale_seedsalesperdistrictchart",
-      "name": "Agro > Agro Reports > Seed Reports > Seed Sales Per District Chart",
+      "name": "AGRO > Agro Reports > Seed Reports > Seed Sales Per District Chart",
       "path": "/crud/sale/seedsalesperdistrictchart",
       "final_url": "/crud/sale/seedsalesperdistrictchart",
-      "load_seconds": 24.8,
+      "load_seconds": 32.5,
       "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
@@ -793,10 +814,10 @@
     },
     {
       "id": "crud_sale_yearlycumulativeseedsalesreport",
-      "name": "Agro > Agro Reports > Seed Reports > Yearly Cumulative Seed Sales Report",
+      "name": "AGRO > Agro Reports > Seed Reports > Yearly Cumulative Seed Sales Report",
       "path": "/crud/sale/yearlycumulativeseedsalesreport",
       "final_url": "/crud/sale/yearlycumulativeseedsalesreport",
-      "load_seconds": 19.8,
+      "load_seconds": 8.9,
       "error": null,
       "kind": "page",
       "heading": "YEARLY CUMULATIVE SEED SALES REPORT",
@@ -812,10 +833,10 @@
     },
     {
       "id": "report_default_districtfertilizersummary",
-      "name": "Agro > Agro Reports > Fertilizer Reports > District Fertilizer Summary",
+      "name": "AGRO > Agro Reports > Fertilizer Reports > District Fertilizer Summary",
       "path": "/report/default/districtfertilizersummary",
       "final_url": "/report/default/districtfertilizersummary",
-      "load_seconds": 20.1,
+      "load_seconds": 7.1,
       "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
@@ -831,10 +852,10 @@
     },
     {
       "id": "crud_farmergroup_fertilizerreport",
-      "name": "Agro > Agro Reports > Fertilizer Reports > Farmer-Group Fertilizer Summary",
+      "name": "AGRO > Agro Reports > Fertilizer Reports > Farmer-Group Fertilizer Summary",
       "path": "/crud/farmergroup/fertilizerreport",
       "final_url": "/crud/farmergroup/fertilizerreport",
-      "load_seconds": 20.1,
+      "load_seconds": 6.2,
       "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
@@ -850,10 +871,10 @@
     },
     {
       "id": "crud_sale_mapreport",
-      "name": "Agro > Agro Reports > Sales Map report",
+      "name": "AGRO > Agro Reports > Sales Map report",
       "path": "/crud/sale/mapreport",
       "final_url": "/crud/sale/mapreport",
-      "load_seconds": 20.1,
+      "load_seconds": 9.4,
       "error": null,
       "kind": "page",
       "heading": "",
@@ -872,7 +893,7 @@
       "name": "Worker > Tractor agents",
       "path": "/crud/tractor-agent/tractoragents",
       "final_url": "/crud/tractor-agent/tractoragents",
-      "load_seconds": 2.9,
+      "load_seconds": 2.7,
       "error": null,
       "kind": "vue",
       "heading": "Tractor Agents",
@@ -888,8 +909,8 @@
         "ACTIVE",
         "CREATED DATE"
       ],
-      "total": 4,
-      "rows": 4,
+      "total": 29,
+      "rows": 20,
       "sort_keys": [
         "id",
         "name",
@@ -986,13 +1007,61 @@
       "view_href": null,
       "vue_view": true,
       "add_button": "Add",
-      "create_path": null,
-      "create_in_modal": true,
+      "create_path": "/crud/tractor-agent/create-tractor-agent",
+      "create_error": null,
       "form_fields": [
         {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "first name",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "last name",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "username",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "account number",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "bank",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "account_name",
+          "required": false
+        },
+        {
           "tag": "select",
           "type": "select-one",
-          "id": "department_id",
+          "id": "district_id",
           "name": "",
           "placeholder": "",
           "required": false
@@ -1000,7 +1069,7 @@
         {
           "tag": "select",
           "type": "select-one",
-          "id": "ward",
+          "id": "ward_id",
           "name": "",
           "placeholder": "",
           "required": false
@@ -1008,7 +1077,47 @@
         {
           "tag": "select",
           "type": "select-one",
-          "id": "district",
+          "id": "org_key",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
+          "id": "designation",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "phone no",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "nida number",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
+          "id": "is_deleted",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
+          "id": "supervisor",
           "name": "",
           "placeholder": "",
           "required": false
@@ -1020,7 +1129,7 @@
       "name": "Worker > Agents",
       "path": "/crud/worker/agents?workeid=",
       "final_url": "/crud/worker/agents?workeid=",
-      "load_seconds": 2.8,
+      "load_seconds": 2.6,
       "error": null,
       "kind": "vue",
       "heading": "Agents",
@@ -1038,8 +1147,8 @@
         "ACTIVE",
         "CREATED DATE"
       ],
-      "total": 646,
-      "rows": 20,
+      "total": 15,
+      "rows": 15,
       "sort_keys": [
         "id",
         "name",
@@ -1190,6 +1299,14 @@
         {
           "tag": "select",
           "type": "select-one",
+          "id": "designation",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
           "id": "department_id",
           "name": "",
           "placeholder": "",
@@ -1258,7 +1375,7 @@
       "name": "Worker > Employees",
       "path": "/crud/worker/employees?workeid=",
       "final_url": "/crud/worker/employees?workeid=",
-      "load_seconds": 2.7,
+      "load_seconds": 2.5,
       "error": null,
       "kind": "vue",
       "heading": "Employees",
@@ -1276,7 +1393,7 @@
         "ACTIVE",
         "CREATED DATE"
       ],
-      "total": 149,
+      "total": 90,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -1428,6 +1545,14 @@
         {
           "tag": "select",
           "type": "select-one",
+          "id": "designation",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
           "id": "department_id",
           "name": "",
           "placeholder": "",
@@ -1496,7 +1621,7 @@
       "name": "Worker > Warehouses",
       "path": "/crud/worker/warehouses?workeid=",
       "final_url": "/crud/worker/warehouses?workeid=",
-      "load_seconds": 3.0,
+      "load_seconds": 2.9,
       "error": null,
       "kind": "vue",
       "heading": "Warehouses",
@@ -1731,6 +1856,93 @@
       ]
     },
     {
+      "id": "crud_worker_extended_stores",
+      "name": "Worker > Extended Stores",
+      "path": "/crud/worker/extended-stores",
+      "final_url": "/crud/worker/extended-stores",
+      "load_seconds": 1.4,
+      "error": null,
+      "kind": "table",
+      "heading": "",
+      "columns": [
+        "S/N",
+        "STORE",
+        "USERNAME",
+        "WAREHOUSE",
+        "WARD",
+        "STOCKIST",
+        "STATUS"
+      ],
+      "total": null,
+      "rows": 1,
+      "sort_keys": [],
+      "filters": [],
+      "has_pagination": false,
+      "view_href": null,
+      "vue_view": false,
+      "add_button": "Add Extended Store",
+      "create_path": "/crud/worker/create-extended-store",
+      "create_error": null,
+      "form_fields": [
+        {
+          "tag": "select",
+          "type": "select-one",
+          "id": "parent_warehouse_id",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "e.g. Singida Cereals",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "receives the stock issue OTP",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "username",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
+          "id": "operator_username",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
+          "id": "stockist_id",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
+          "id": "stockist_customer_type_id",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        }
+      ]
+    },
+    {
       "id": "crud_worker_shops",
       "name": "Worker > Shops",
       "path": "/crud/worker/shops?workeid=",
@@ -1753,7 +1965,7 @@
         "DELETED",
         "CREATED DATE"
       ],
-      "total": 29,
+      "total": 36,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -1925,7 +2137,7 @@
       "name": "Worker > Clusters",
       "path": "/crud/clusters/index",
       "final_url": "/crud/clusters/index",
-      "load_seconds": 1.4,
+      "load_seconds": 1.5,
       "error": null,
       "kind": "vue",
       "heading": "clusters",
@@ -1935,8 +2147,8 @@
         "LEADER",
         "ACTIONS"
       ],
-      "total": 19,
-      "rows": 9,
+      "total": 2,
+      "rows": 1,
       "sort_keys": [
         "id",
         "name",
@@ -2012,7 +2224,7 @@
         "ACTIVE",
         "CREATED DATE"
       ],
-      "total": 992,
+      "total": 268,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -2164,6 +2376,14 @@
         {
           "tag": "select",
           "type": "select-one",
+          "id": "designation",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
           "id": "department_id",
           "name": "",
           "placeholder": "",
@@ -2232,7 +2452,7 @@
       "name": "Worker > Worker phone",
       "path": "/crud/workerphone/index2?workerid=",
       "final_url": "/crud/workerphone/index2?workerid=",
-      "load_seconds": 1.9,
+      "load_seconds": 1.7,
       "error": null,
       "kind": "vue",
       "heading": "Worker Phone",
@@ -2245,7 +2465,7 @@
         "CREATED DATE",
         "ACTIONS"
       ],
-      "total": 1418,
+      "total": 577,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -2273,7 +2493,7 @@
         }
       ],
       "has_pagination": false,
-      "view_href": "/crud/worker/view?id=2669",
+      "view_href": "/crud/worker/view?id=2703",
       "vue_view": true,
       "add_button": "Add",
       "create_path": "/crud/workerphone/create2",
@@ -2294,7 +2514,7 @@
       "name": "Worker > Worker leave type",
       "path": "/crud/leavetype/index?workerid=",
       "final_url": "/crud/leavetype/index?workerid=",
-      "load_seconds": 14.7,
+      "load_seconds": 7.7,
       "error": null,
       "kind": "table",
       "heading": "LEAVE TYPES",
@@ -2306,11 +2526,11 @@
         "Created Date"
       ],
       "total": null,
-      "rows": 5,
+      "rows": 0,
       "sort_keys": [],
       "filters": [],
       "has_pagination": false,
-      "view_href": "/crud/leavetype/view",
+      "view_href": null,
       "vue_view": false,
       "add_button": "Create Leave Type",
       "create_path": "/crud/leavetype/create",
@@ -2339,7 +2559,7 @@
       "name": "Worker > Worker leave",
       "path": "/crud/workerleave/index?workerid=",
       "final_url": "/crud/workerleave/index?workerid=",
-      "load_seconds": 20.1,
+      "load_seconds": 5.9,
       "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
@@ -2358,7 +2578,7 @@
       "name": "Worker > Worker Linked",
       "path": "/crud/workerlink/index",
       "final_url": "/crud/workerlink/index",
-      "load_seconds": 20.0,
+      "load_seconds": 5.7,
       "error": null,
       "kind": "table",
       "heading": "Linked Accounts",
@@ -2382,7 +2602,7 @@
       "name": "Worker > Candidate Workers",
       "path": "/survey/candidateworker/index",
       "final_url": "/survey/candidateworker/index",
-      "load_seconds": 19.1,
+      "load_seconds": 5.4,
       "error": null,
       "kind": "grid",
       "heading": "CANDIDATE WORKERS",
@@ -2396,8 +2616,8 @@
         "Created At",
         "Modified At"
       ],
-      "total": 232,
-      "rows": 20,
+      "total": null,
+      "rows": 0,
       "sort_keys": [
         "name",
         "ward",
@@ -2443,8 +2663,8 @@
           "type": "text"
         }
       ],
-      "has_pagination": true,
-      "view_href": "/survey/candidateworker/view?id=1",
+      "has_pagination": false,
+      "view_href": null,
       "vue_view": false,
       "add_button": "Create Candidate Worker",
       "create_path": "/survey/candidateworker/create",
@@ -2526,7 +2746,7 @@
       "name": "Worker > Worker Reports > Survey Report",
       "path": "/survey/default/surveycallreport",
       "final_url": "/survey/default/surveycallreport",
-      "load_seconds": 19.5,
+      "load_seconds": 6.8,
       "error": null,
       "kind": "table",
       "heading": "PAYG REMINDER SURVEY",
@@ -2537,7 +2757,7 @@
         "REMINDER SURVEY"
       ],
       "total": null,
-      "rows": 11,
+      "rows": 0,
       "sort_keys": [],
       "filters": [],
       "has_pagination": false,
@@ -2550,13 +2770,19 @@
       "name": "Worker > Worker Reports > New Customer Survey Report",
       "path": "/survey/default/newcustomersurveyreport",
       "final_url": "/survey/default/newcustomersurveyreport",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
+      "load_seconds": 23.4,
+      "error": null,
+      "kind": "table",
+      "heading": "NEW CUSTOMER SURVEY REPORT: 01-09-2026 - 27-10-2026",
+      "columns": [
+        "#",
+        "QUESTION",
+        "TOTAL SURVEYED",
+        "ANSWERED [YES]",
+        "ANSWERED [NO]"
+      ],
       "total": null,
-      "rows": 0,
+      "rows": 1,
       "sort_keys": [],
       "filters": [],
       "has_pagination": false,
@@ -2568,10 +2794,10 @@
     },
     {
       "id": "crud_organizationpositions_org_structure_positionwise",
-      "name": "Org Structure > Position Wise",
+      "name": "ORG STRUCTURE > Position Wise",
       "path": "/crud/organizationpositions/org-structure-positionwise",
       "final_url": "/crud/organizationpositions/jumla-structure-positionwise",
-      "load_seconds": 38.0,
+      "load_seconds": 12.1,
       "error": null,
       "kind": "page",
       "heading": "JUMLA ORGANIZATION STRUCTURE POSITION WISE",
@@ -2587,10 +2813,10 @@
     },
     {
       "id": "crud_organizationpositions_org_structure_departmentwise",
-      "name": "Org Structure > Department Wise",
+      "name": "ORG STRUCTURE > Department Wise",
       "path": "/crud/organizationpositions/org-structure-departmentwise",
       "final_url": "/crud/organizationpositions/org-structure-departmentwise",
-      "load_seconds": 39.5,
+      "load_seconds": 11.2,
       "error": null,
       "kind": "page",
       "heading": "HEADQUARTER ORGANIZATION STRUCTURE DEPARTMENT WISE",
@@ -2609,7 +2835,7 @@
       "name": "Customer > All Customers",
       "path": "/crud/customer/index2",
       "final_url": "/crud/customer/index2",
-      "load_seconds": 10.5,
+      "load_seconds": 11.7,
       "error": null,
       "kind": "vue",
       "heading": "Customers",
@@ -2626,7 +2852,7 @@
         "PHONE NUMBER",
         "ACTIONS"
       ],
-      "total": 274978,
+      "total": 275468,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -2759,7 +2985,7 @@
       "name": "Customer > Customer phone",
       "path": "/crud/customerphone/index",
       "final_url": "/crud/customerphone/index",
-      "load_seconds": 20.2,
+      "load_seconds": 8.2,
       "error": null,
       "kind": "grid",
       "heading": "CUSTOMER PHONES",
@@ -2772,7 +2998,7 @@
         "Created By",
         "Server Date"
       ],
-      "total": 182804,
+      "total": 183295,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -2857,7 +3083,7 @@
       "name": "Customer > Customer map",
       "path": "/crud/customer/map?workerid=",
       "final_url": "/crud/customer/map?workerid=",
-      "load_seconds": 22.4,
+      "load_seconds": 7.4,
       "error": null,
       "kind": "page",
       "heading": "CUSTOMER MAP",
@@ -2876,18 +3102,152 @@
       "name": "Sales > All Sales",
       "path": "/crud/sale/index?workerid=",
       "final_url": "/crud/sale/index?workerid=",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
+      "load_seconds": 40.4,
+      "error": null,
+      "kind": "vue",
+      "heading": "Sales",
+      "columns": [
+        "ID",
+        "ORDER NUMBER",
+        "WORKER",
+        "DISTRICT",
+        "CUSTOMER",
+        "ITEM",
+        "SERIAL NUMBER",
+        "QUANTITY",
+        "TOTAL AMOUNT",
+        "SALE TYPE",
+        "ACTIVATION BALANCE",
+        "STATE",
+        "VERIFIED",
+        "DELETED",
+        "REFERENCE #",
+        "CREATED DATE",
+        "ACTIONS"
+      ],
+      "total": 133007,
+      "rows": 20,
+      "sort_keys": [
+        "id",
+        "order_number",
+        "worker",
+        "customer",
+        "item",
+        "serial_number",
+        "qty",
+        "total_amount",
+        "transaction_number",
+        "verification_attempts",
+        "verified_date",
+        "created_date"
+      ],
+      "filters": [
+        {
+          "label": "ID",
+          "name": "ID",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "label": "Serial Number",
+          "name": "Serial Number",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "label": "Order Number",
+          "name": "Order Number",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "label": "Customer Name",
+          "name": "Customer Name",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "label": "Item",
+          "name": "item_id",
+          "tag": "select",
+          "type": "select-multiple"
+        },
+        {
+          "label": "Item",
+          "name": "Item",
+          "tag": "input",
+          "type": "search"
+        },
+        {
+          "label": "Item Categories",
+          "name": "item_category_id",
+          "tag": "select",
+          "type": "select-multiple"
+        },
+        {
+          "label": "Item Categories",
+          "name": "Item categories",
+          "tag": "input",
+          "type": "search"
+        },
+        {
+          "label": "Worker",
+          "name": "worker_id",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "label": "Worker Type",
+          "name": "worker_type",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "label": "Cluster",
+          "name": "cluster_id",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "label": "District",
+          "name": "district_id",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "label": "Verified",
+          "name": "verified",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "label": "Deleted",
+          "name": "deleted",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "label": "From",
+          "name": "from",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "label": "To",
+          "name": "to",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "label": "Customer Type",
+          "name": "customer_type_id",
+          "tag": "select",
+          "type": "select-one"
+        }
+      ],
       "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
+      "view_href": "/crud/sale/view?id=338103",
+      "vue_view": true,
       "add_button": null,
       "skip": true,
       "notes": "Slow (>55s au 504 Gateway Time-out wakati wa discover 2026-10-09); ondoa skip kuijaribu"
@@ -2897,7 +3257,7 @@
       "name": "Sales > Deleted Sales",
       "path": "/crud/sale/deletedsale?workerid=",
       "final_url": "/crud/sale/deletedsale?workerid=",
-      "load_seconds": 24.3,
+      "load_seconds": 10.9,
       "error": null,
       "kind": "grid",
       "heading": "DELETED SALES",
@@ -3007,7 +3367,7 @@
       "name": "Sales > Sales Reports > Receipt Sales",
       "path": "/crud/sale/receiptsale?workerid=",
       "final_url": "/crud/sale/receiptsale?workerid=",
-      "load_seconds": 31.2,
+      "load_seconds": 30.3,
       "error": null,
       "kind": "grid",
       "heading": "RECEIPT SALES",
@@ -3031,7 +3391,7 @@
         "Receipt",
         "Warranty"
       ],
-      "total": 375,
+      "total": 353,
       "rows": 25,
       "sort_keys": [
         "id",
@@ -3105,7 +3465,7 @@
         }
       ],
       "has_pagination": true,
-      "view_href": "/crud/customer/view?id=12166329",
+      "view_href": "/crud/customer/view?id=12200264",
       "vue_view": false,
       "add_button": null
     },
@@ -3114,7 +3474,7 @@
       "name": "Sales > Sales Reports > Sales Per Month",
       "path": "/crud/sale/salespermonth",
       "final_url": "/crud/sale/salespermonth",
-      "load_seconds": 14.4,
+      "load_seconds": 5.0,
       "error": null,
       "kind": "table",
       "heading": "SALES PER MONTH",
@@ -3136,7 +3496,7 @@
       "name": "Sales > Sales Reports > Sales Per Item",
       "path": "/crud/sale/salesperitem?workerid=",
       "final_url": "/crud/sale/salesperitem?workerid=",
-      "load_seconds": 13.9,
+      "load_seconds": 5.4,
       "error": null,
       "kind": "page",
       "heading": "Daily Quantity Sold Per Item in Hanang district",
@@ -3155,7 +3515,7 @@
       "name": "Sales > Sales Reports > Sales Per Worker",
       "path": "/crud/sale/saleperworker",
       "final_url": "/crud/sale/saleperworker",
-      "load_seconds": 38.1,
+      "load_seconds": 17.0,
       "error": null,
       "kind": "table",
       "heading": "SALE PER ITEM PER WORKER",
@@ -3197,7 +3557,7 @@
         "OS PLUS MKOPO"
       ],
       "total": null,
-      "rows": 1264,
+      "rows": 285,
       "sort_keys": [],
       "filters": [],
       "has_pagination": false,
@@ -3210,7 +3570,7 @@
       "name": "Sales > Sales Reports > Sales Per Area",
       "path": "/report/default/salesperarea",
       "final_url": "/report/default/salesperarea",
-      "load_seconds": 14.3,
+      "load_seconds": 6.1,
       "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
@@ -3226,10 +3586,10 @@
     },
     {
       "id": "crud_saletargets_index",
-      "name": "Sales > Sale targets",
+      "name": "Sales > Sale Targets",
       "path": "/crud/saletargets/index",
       "final_url": "/crud/saletargets/index",
-      "load_seconds": 1.6,
+      "load_seconds": 1.7,
       "error": null,
       "kind": "vue",
       "heading": "",
@@ -3300,11 +3660,70 @@
       ]
     },
     {
+      "id": "crud_agrimachine_profoma",
+      "name": "Stock > Profoma > Agrimachine Profoma",
+      "path": "/crud/agrimachine/profoma",
+      "final_url": "/crud/agrimachine/profoma",
+      "load_seconds": 2.0,
+      "error": null,
+      "kind": "vue",
+      "heading": "Agrimachine Profoma",
+      "columns": [
+        "CUSTOMER",
+        "CUSTOMER ADDRESS",
+        "PROFOMA NO",
+        "TYPE",
+        "PROFOMA DATE",
+        "TOTAL PAYABLE AMOUNT",
+        "CREATED BY",
+        "MODIFIED BY",
+        "CREATED DATE",
+        "ACTIONS"
+      ],
+      "total": 209,
+      "rows": 20,
+      "sort_keys": [
+        "id",
+        "name",
+        "created_date"
+      ],
+      "filters": [
+        {
+          "label": "Customer",
+          "name": "customer",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "label": "Profoma No",
+          "name": "profoma no",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "label": "Type",
+          "name": "profoma_type",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "label": "Created By",
+          "name": "created_by",
+          "tag": "select",
+          "type": "select-one"
+        }
+      ],
+      "has_pagination": false,
+      "view_href": null,
+      "vue_view": true,
+      "add_button": null
+    },
+    {
       "id": "crud_stockdispatch_index",
-      "name": "Stock > Stock Dispatch > All stock dispatch",
+      "name": "Stock > Stock dispatch > all stock dispatch",
       "path": "/crud/stockdispatch/index",
       "final_url": "/crud/stockdispatch/index",
-      "load_seconds": 1.5,
+      "load_seconds": 1.9,
       "error": null,
       "kind": "vue",
       "heading": "Stock Dispatch",
@@ -3322,7 +3741,7 @@
         "TOTAL QTY",
         "ACTIONS"
       ],
-      "total": 208,
+      "total": 360,
       "rows": 20,
       "sort_keys": [
         "id"
@@ -3414,7 +3833,7 @@
     },
     {
       "id": "crud_stockdispatch_requests",
-      "name": "Stock > Stock Dispatch > Stock Requests",
+      "name": "Stock > Stock dispatch > stock requests",
       "path": "/crud/stockdispatch/requests",
       "final_url": "/crud/stockdispatch/requests",
       "load_seconds": 2.0,
@@ -3430,7 +3849,7 @@
         "APPROVED BY",
         "ACTIONS"
       ],
-      "total": 130,
+      "total": 87,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -3469,10 +3888,10 @@
     },
     {
       "id": "crud_stockdispatch_deliveries",
-      "name": "Stock > Stock Dispatch > all stock deliveries",
+      "name": "Stock > Stock dispatch > all stock deliveries",
       "path": "/crud/stockdispatch/deliveries",
       "final_url": "/crud/stockdispatch/deliveries",
-      "load_seconds": 2.0,
+      "load_seconds": 2.1,
       "error": null,
       "kind": "vue",
       "heading": "Stock Delivery Points",
@@ -3488,7 +3907,7 @@
         "TOTAL QTY",
         "DATE"
       ],
-      "total": 207,
+      "total": 308,
       "rows": 20,
       "sort_keys": [
         "drop_points.id",
@@ -3583,10 +4002,10 @@
     },
     {
       "id": "crud_agrimachine_index",
-      "name": "Stock > Agrimachinery > All Agrimachines",
+      "name": "Stock > Agrimachine > All agrimachine",
       "path": "/crud/agrimachine/index",
       "final_url": "/crud/agrimachine/index",
-      "load_seconds": 2.3,
+      "load_seconds": 2.2,
       "error": null,
       "kind": "vue",
       "heading": "Agrimachines",
@@ -3652,6 +4071,18 @@
           "name": "bl_no",
           "tag": "select",
           "type": "select-one"
+        },
+        {
+          "label": "Stocked From",
+          "name": "from",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "label": "Stocked To",
+          "name": "to",
+          "tag": "input",
+          "type": "text"
         }
       ],
       "has_pagination": false,
@@ -3681,10 +4112,10 @@
     },
     {
       "id": "crud_agrimachine_agrimachinelog",
-      "name": "Stock > Agrimachinery > Agrimachine Activity",
+      "name": "Stock > Agrimachine > Agrimachine Activity",
       "path": "/crud/agrimachine/agrimachinelog",
       "final_url": "/crud/agrimachine/agrimachinelog",
-      "load_seconds": 1.5,
+      "load_seconds": 2.3,
       "error": null,
       "kind": "vue",
       "heading": "Agrimachines Activity",
@@ -3704,7 +4135,7 @@
         "CREATED BY",
         "CREATED DATE"
       ],
-      "total": 2088,
+      "total": 2106,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -3732,7 +4163,7 @@
     },
     {
       "id": "crud_agrimachine_pendingagrimachine",
-      "name": "Stock > Agrimachinery > Pending Agrimachines",
+      "name": "Stock > Agrimachine > Pending Agrimachines",
       "path": "/crud/agrimachine/pendingagrimachine",
       "final_url": "/crud/agrimachine/pendingagrimachine",
       "load_seconds": 1.6,
@@ -3792,120 +4223,11 @@
       "add_button": null
     },
     {
-      "id": "crud_agrimachine_profoma",
-      "name": "Stock > Agrimachinery > Agrimachine Profoma",
-      "path": "/crud/agrimachine/profoma",
-      "final_url": "/crud/agrimachine/profoma",
-      "load_seconds": 1.8,
-      "error": null,
-      "kind": "vue",
-      "heading": "Agrimachine Profoma",
-      "columns": [
-        "CUSTOMER",
-        "CUSTOMER ADDRESS",
-        "PROFOMA NO",
-        "PROFOMA DATE",
-        "TOTAL PAYABLE AMOUNT",
-        "CREATED BY",
-        "MODIFIED BY",
-        "CREATED DATE",
-        "ACTIONS"
-      ],
-      "total": 163,
-      "rows": 20,
-      "sort_keys": [
-        "id",
-        "name",
-        "created_date"
-      ],
-      "filters": [
-        {
-          "label": "Customer",
-          "name": "customer",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "Profoma No",
-          "name": "profoma no",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "Created By",
-          "name": "created_by",
-          "tag": "select",
-          "type": "select-one"
-        }
-      ],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": true,
-      "add_button": "Add",
-      "create_path": null,
-      "create_in_modal": true,
-      "form_fields": [
-        {
-          "tag": "select",
-          "type": "select-one",
-          "id": "created_by",
-          "name": "",
-          "placeholder": "",
-          "required": false
-        }
-      ]
-    },
-    {
-      "id": "crud_stockactivity_ocstock",
-      "name": "Stock > O/C Stock > O/C Stock",
-      "path": "/crud/stockactivity/ocstock?workerid",
-      "final_url": "/crud/stockactivity/ocstock?workerid",
-      "load_seconds": 11.5,
-      "error": null,
-      "kind": "table",
-      "heading": "September, 2026",
-      "columns": [
-        "Item",
-        "Opening Stock",
-        "Total issues",
-        "Total sales",
-        "Total returns",
-        "Closing Stock"
-      ],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "crud_stockactivity_hqocstock",
-      "name": "Stock > O/C Stock > O/C HQ Stock",
-      "path": "/crud/stockactivity/hqocstock",
-      "final_url": "/crud/stockactivity/hqocstock",
-      "load_seconds": 48.8,
-      "error": "An internal server error occurred",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
       "id": "crud_stock_issue",
       "name": "Stock > Issue Stock",
       "path": "/crud/stock/issue?workerid=",
       "final_url": "/crud/stock/issue?workerid=",
-      "load_seconds": 1.6,
+      "load_seconds": 1.8,
       "error": null,
       "kind": "table",
       "heading": "Issue stock",
@@ -3930,7 +4252,7 @@
       "name": "Stock > Return Stock",
       "path": "/crud/stock/returnstock?workerid=",
       "final_url": "/crud/stock/returnstock?workerid=",
-      "load_seconds": 12.5,
+      "load_seconds": 5.1,
       "error": null,
       "kind": "page",
       "heading": "RETURN STOCK",
@@ -3945,55 +4267,11 @@
       "add_button": null
     },
     {
-      "id": "crud_stock_paygstock",
-      "name": "Stock > Stocks > Payg Stocks",
-      "path": "/crud/stock/paygstock",
-      "final_url": "/crud/stock/paygstock",
-      "load_seconds": 15.0,
-      "error": null,
-      "kind": "table",
-      "heading": "HEADQUARTER SUMMARY",
-      "columns": [
-        "Store Stock:",
-        "0"
-      ],
-      "total": null,
-      "rows": 6,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "crud_paygstockactivity_stocksummary",
-      "name": "Stock > Stocks > OS-300 Stock",
-      "path": "/crud/paygstockactivity/stocksummary",
-      "final_url": "/crud/paygstockactivity/stocksummary",
-      "load_seconds": 22.7,
-      "error": null,
-      "kind": "table",
-      "heading": "HEADQUARTER SUMMARY",
-      "columns": [
-        "Store Stock:",
-        "0"
-      ],
-      "total": null,
-      "rows": 5,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
       "id": "crud_stock_index2",
       "name": "Stock > Stocks > All Stocks",
       "path": "/crud/stock/index2?workerid=",
       "final_url": "/crud/stock/index2?workerid=",
-      "load_seconds": 4.2,
+      "load_seconds": 2.3,
       "error": null,
       "kind": "vue",
       "heading": "Stock",
@@ -4010,7 +4288,7 @@
         "VIEW TOTAL RETURN",
         "ACTIONS"
       ],
-      "total": 16126,
+      "total": 16340,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -4135,7 +4413,7 @@
       "name": "Stock > Stocks > Pending Stocks",
       "path": "/crud/stock/pending?workerid=",
       "final_url": "/crud/stock/pending?workerid=",
-      "load_seconds": 19.9,
+      "load_seconds": 4.7,
       "error": null,
       "kind": "page",
       "heading": "",
@@ -4150,103 +4428,11 @@
       "add_button": null
     },
     {
-      "id": "crud_paygstockactivity_index",
-      "name": "Stock > Activity Reports > OS-300 Activity",
-      "path": "/crud/paygstockactivity/index",
-      "final_url": "/crud/paygstockactivity/index",
-      "load_seconds": 18.6,
-      "error": null,
-      "kind": "grid",
-      "heading": "OS-300 STOCK ACTIVITIES",
-      "columns": [
-        "ID",
-        "From ID",
-        "To ID",
-        "From Type",
-        "To Type",
-        "Serial Number",
-        "Activity Type",
-        "State",
-        "Confirmation Date",
-        "Created Date"
-      ],
-      "total": 115542,
-      "rows": 20,
-      "sort_keys": [
-        "id",
-        "from_id",
-        "to_id",
-        "from_type",
-        "to_type",
-        "serial_number",
-        "activity_type",
-        "state",
-        "confirmation_date",
-        "created_date"
-      ],
-      "filters": [
-        {
-          "name": "PaygStockActivitySearch[id]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygStockActivitySearch[from_id]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygStockActivitySearch[to_id]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygStockActivitySearch[from_type]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygStockActivitySearch[to_type]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygStockActivitySearch[serial_number]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygStockActivitySearch[activity_type]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygStockActivitySearch[state]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygStockActivitySearch[confirmation_date]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygStockActivitySearch[created_date]",
-          "tag": "input",
-          "type": "text"
-        }
-      ],
-      "has_pagination": true,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
       "id": "crud_stockactivity_index",
       "name": "Stock > Activity Reports > Stock Activity",
       "path": "/crud/stockactivity/index?workerid=",
       "final_url": "/crud/stockactivity/index?workerid=",
-      "load_seconds": 41.5,
+      "load_seconds": 43.6,
       "error": null,
       "kind": "grid",
       "heading": "STOCK ACTIVITIES",
@@ -4269,8 +4455,8 @@
         "Pending Faulty Qty From",
         "Pending Faulty Qty To"
       ],
-      "total": 164,
-      "rows": 100,
+      "total": 61,
+      "rows": 61,
       "sort_keys": [
         "id",
         "qty",
@@ -4468,7 +4654,7 @@
       "name": "Stock > Activity Reports > Full Stock Activity",
       "path": "/crud/stockactivity/indexall?workerid=",
       "final_url": "/crud/stockactivity/indexall?workerid=",
-      "load_seconds": 39.1,
+      "load_seconds": 43.5,
       "error": null,
       "kind": "grid",
       "heading": "STOCK ACTIVITIES",
@@ -4491,7 +4677,7 @@
         "Pending Faulty Qty From",
         "Pending Faulty Qty To"
       ],
-      "total": 610,
+      "total": 785,
       "rows": 100,
       "sort_keys": [
         "id",
@@ -4690,85 +4876,16 @@
       "name": "Stock > Stock Anomaly",
       "path": "/crud/stock/stockanomaly",
       "final_url": "/crud/stock/stockanomaly",
-      "load_seconds": 43.8,
-      "error": null,
-      "kind": "grid",
-      "heading": "STOCKS",
-      "columns": [
-        "Item ID",
-        "Item ID",
-        "Created By",
-        "Worker ID",
-        "Worker",
-        "Qty",
-        "Total Issue",
-        "Total Return",
-        "Total Sale Two",
-        "Expected Balance",
-        "Modified Date",
-        "Pending QTY",
-        "Pending Faulty QTY"
-      ],
-      "total": 639,
-      "rows": 25,
-      "sort_keys": [
-        "item_id",
-        "item_id",
-        "worker_id",
-        "fullName",
-        "qty",
-        "modified_date",
-        "pending_qty",
-        "pending_faulty_qty"
-      ],
-      "filters": [
-        {
-          "name": "StockSearch[item_id]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "StockSearch[item_id]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "StockSearch[creatorName]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "StockSearch[worker_id]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "StockSearch[worker_id]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "StockSearch[qty]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "StockSearch[modified_date]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "StockSearch[pending_qty]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "StockSearch[pending_faulty_qty]",
-          "tag": "input",
-          "type": "text"
-        }
-      ],
-      "has_pagination": true,
+      "load_seconds": 60.9,
+      "error": "504 Gateway Time-out",
+      "kind": "page",
+      "heading": "",
+      "columns": [],
+      "total": null,
+      "rows": 0,
+      "sort_keys": [],
+      "filters": [],
+      "has_pagination": false,
       "view_href": null,
       "vue_view": false,
       "add_button": null
@@ -4778,8 +4895,8 @@
       "name": "Stock > Stock Reports > Stock Report",
       "path": "/crud/stock/stockreports?workerid=",
       "final_url": "/crud/stock/stockreports?workerid=",
-      "load_seconds": 56.4,
-      "error": "An internal server error occurred",
+      "load_seconds": 60.9,
+      "error": "504 Gateway Time-out",
       "kind": "page",
       "heading": "",
       "columns": [],
@@ -4799,8 +4916,8 @@
       "name": "Stock > Stock Reports > Stock Summary Report",
       "path": "/crud/stock/summaryreport?workerid=",
       "final_url": "/crud/stock/summaryreport?workerid=",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
+      "load_seconds": 41.1,
+      "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
       "columns": [],
@@ -4820,7 +4937,7 @@
       "name": "Stock > Audit > Perform Audit",
       "path": "/report/audit/performaudit",
       "final_url": "/report/audit/performaudit",
-      "load_seconds": 10.4,
+      "load_seconds": 9.3,
       "error": null,
       "kind": "page",
       "heading": "PERFORM AUDIT",
@@ -4839,7 +4956,7 @@
       "name": "Stock > Audit > All Audits",
       "path": "/report/audit/auditplatform",
       "final_url": "/report/audit/auditplatform",
-      "load_seconds": 14.8,
+      "load_seconds": 6.9,
       "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
@@ -4858,7 +4975,7 @@
       "name": "Stock > Audit > Debtbook",
       "path": "/crud/debtbook/index",
       "final_url": "/crud/debtbook/index",
-      "load_seconds": 12.7,
+      "load_seconds": 8.4,
       "error": null,
       "kind": "grid",
       "heading": "DEBT BOOKS",
@@ -4934,18 +5051,13 @@
       "name": "Stock > Audit > Audit Report",
       "path": "/report/audit/auditreport",
       "final_url": "/report/audit/auditreport",
-      "load_seconds": 53.2,
-      "error": null,
-      "kind": "table",
-      "heading": "AUDIT REPORT",
-      "columns": [
-        "Item",
-        "Audit qty",
-        "Stock qty",
-        "Difference(stock qty-Audit qty)"
-      ],
+      "load_seconds": 60.9,
+      "error": "504 Gateway Time-out",
+      "kind": "page",
+      "heading": "",
+      "columns": [],
       "total": null,
-      "rows": 1079,
+      "rows": 0,
       "sort_keys": [],
       "filters": [],
       "has_pagination": false,
@@ -4958,7 +5070,7 @@
       "name": "Stock > Audit > Audit Map",
       "path": "/report/auditgps/map",
       "final_url": "/report/auditgps/map",
-      "load_seconds": 11.3,
+      "load_seconds": 7.3,
       "error": null,
       "kind": "page",
       "heading": "AUDIT GPS MAP",
@@ -4971,144 +5083,6 @@
       "view_href": null,
       "vue_view": false,
       "add_button": null
-    },
-    {
-      "id": "crud_itembundle_index",
-      "name": "Stock > Items > Item Bundles",
-      "path": "/crud/itembundle/index?workerid=",
-      "final_url": "/crud/itembundle/index?workerid=",
-      "load_seconds": 11.4,
-      "error": null,
-      "kind": "grid",
-      "heading": "ITEM BUNDLES",
-      "columns": [
-        "ID",
-        "Bundle Item",
-        "Item",
-        "Item Qty",
-        "Is Deleted",
-        "Created By",
-        "Created Date",
-        "Modified Date"
-      ],
-      "total": 18,
-      "rows": 18,
-      "sort_keys": [
-        "id",
-        "bundle_item",
-        "item_id",
-        "item_qty",
-        "is_deleted",
-        "created_by",
-        "created_date",
-        "modified_date"
-      ],
-      "filters": [
-        {
-          "name": "ItemBundleSearch[id]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "ItemBundleSearch[bundle_item]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "ItemBundleSearch[item_id]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "ItemBundleSearch[item_qty]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "ItemBundleSearch[is_deleted]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "ItemBundleSearch[created_by]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "ItemBundleSearch[created_date]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "ItemBundleSearch[modified_date]",
-          "tag": "input",
-          "type": "text"
-        }
-      ],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": "Create Item Bundles",
-      "create_path": "/crud/itembundle/create",
-      "create_error": null,
-      "form_fields": [
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "itembundle-bundle_item",
-          "name": "ItemBundle[bundle_item]",
-          "placeholder": "",
-          "required": false
-        },
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "itembundle-item_id",
-          "name": "ItemBundle[item_id]",
-          "placeholder": "",
-          "required": false
-        },
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "itembundle-item_qty",
-          "name": "ItemBundle[item_qty]",
-          "placeholder": "",
-          "required": false
-        },
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "itembundle-is_deleted",
-          "name": "ItemBundle[is_deleted]",
-          "placeholder": "",
-          "required": false
-        },
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "itembundle-created_by",
-          "name": "ItemBundle[created_by]",
-          "placeholder": "",
-          "required": false
-        },
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "itembundle-created_date",
-          "name": "ItemBundle[created_date]",
-          "placeholder": "",
-          "required": false
-        },
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "itembundle-modified_date",
-          "name": "ItemBundle[modified_date]",
-          "placeholder": "",
-          "required": false
-        }
-      ]
     },
     {
       "id": "crud_item_index2",
@@ -5129,7 +5103,7 @@
         "UNIT MEASURE",
         "ACTIONS"
       ],
-      "total": 1079,
+      "total": 1082,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -5332,7 +5306,7 @@
       "name": "Stock > Items > Item Price History",
       "path": "/crud/itempricehistory/index?workerid=",
       "final_url": "/crud/itempricehistory/index?workerid=",
-      "load_seconds": 24.1,
+      "load_seconds": 10.9,
       "error": null,
       "kind": "grid",
       "heading": "ITEM PRICE HISTORIES",
@@ -5343,8 +5317,8 @@
         "New Price",
         "Created Date"
       ],
-      "total": 753,
-      "rows": 20,
+      "total": null,
+      "rows": 0,
       "sort_keys": [
         "id",
         "item_id",
@@ -5379,8 +5353,8 @@
           "type": "text"
         }
       ],
-      "has_pagination": true,
-      "view_href": "/crud/itempricehistory/view?id=761",
+      "has_pagination": false,
+      "view_href": null,
       "vue_view": false,
       "add_button": "Create Item Price History",
       "create_path": "/crud/itempricehistory/create",
@@ -5392,7 +5366,7 @@
       "name": "Stock > Items > Item Categories",
       "path": "/crud/itemcategory/index",
       "final_url": "/crud/itemcategory/index",
-      "load_seconds": 1.7,
+      "load_seconds": 2.1,
       "error": null,
       "kind": "vue",
       "heading": "Item Categories",
@@ -5456,7 +5430,7 @@
       "name": "Stock > Item Pricing > Pricing Histry",
       "path": "/crud/itempricinglogs/indexall",
       "final_url": "/crud/itempricinglogs/indexall",
-      "load_seconds": 3.8,
+      "load_seconds": 4.0,
       "error": null,
       "kind": "vue",
       "heading": "Item Pricing All Logs",
@@ -5472,7 +5446,7 @@
         "DESCRIPTION",
         "ACTION"
       ],
-      "total": 85297,
+      "total": 85333,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -5514,7 +5488,7 @@
       "name": "Stock > Item Pricing > Current Pricing",
       "path": "/crud/itempricing/index",
       "final_url": "/crud/itempricing/index",
-      "load_seconds": 2.3,
+      "load_seconds": 2.6,
       "error": null,
       "kind": "vue",
       "heading": "Current Item Pricing",
@@ -5528,7 +5502,7 @@
         "DESCRIPTION",
         "ACTION"
       ],
-      "total": 46907,
+      "total": 47181,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -5630,7 +5604,7 @@
       "name": "Stock > Supplier > All Suppliers",
       "path": "/crud/supplier/index2",
       "final_url": "/crud/supplier/index2",
-      "load_seconds": 1.6,
+      "load_seconds": 1.7,
       "error": null,
       "kind": "vue",
       "heading": "Suppliers",
@@ -5694,7 +5668,7 @@
       "name": "Stock > Supplier > Pending Supplier Stock",
       "path": "/crud/stock/stockapproval2",
       "final_url": "/crud/stock/stockapproval2",
-      "load_seconds": 1.6,
+      "load_seconds": 1.5,
       "error": null,
       "kind": "vue",
       "heading": "PENDING SUPPLIER STOCK",
@@ -5722,7 +5696,7 @@
       "name": "Stock > Supplier > Supplier Log",
       "path": "/crud/supplierlog/index2",
       "final_url": "/crud/supplierlog/index2",
-      "load_seconds": 1.9,
+      "load_seconds": 2.4,
       "error": null,
       "kind": "vue",
       "heading": "Supplier Log",
@@ -5735,7 +5709,7 @@
         "CREATED DATE",
         "ACTIONS"
       ],
-      "total": 7475,
+      "total": 7370,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -5778,7 +5752,7 @@
       "name": "Stock > Retail Orders > Warehouse Stock Availability",
       "path": "/crud/stock/warehousestockavailability",
       "final_url": "/crud/stock/warehousestockavailability",
-      "load_seconds": 2.8,
+      "load_seconds": 4.1,
       "error": null,
       "kind": "vue",
       "heading": "Warehouse Stock Availability",
@@ -5789,7 +5763,7 @@
         "QUANTITY"
       ],
       "total": null,
-      "rows": 7,
+      "rows": 5,
       "sort_keys": [],
       "filters": [],
       "has_pagination": false,
@@ -5799,10 +5773,10 @@
     },
     {
       "id": "crud_stock_retailrequests",
-      "name": "Stock > Retail Orders > All Stock Requests",
+      "name": "Stock > Retail Orders > Stock Requests",
       "path": "/crud/stock/retailrequests",
       "final_url": "/crud/stock/retailrequests",
-      "load_seconds": 12.0,
+      "load_seconds": 5.6,
       "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
@@ -5821,7 +5795,7 @@
       "name": "Stock > Retail Orders > Request Stock",
       "path": "/crud/stock/createretailstockrequest",
       "final_url": "/crud/stock/createretailstockrequest",
-      "load_seconds": 11.6,
+      "load_seconds": 3.3,
       "error": null,
       "kind": "table",
       "heading": "Retail Stock Requests",
@@ -5845,7 +5819,7 @@
       "name": "Stock > Stock Status",
       "path": "/crud/stock/stockstatus",
       "final_url": "/crud/stock/stockstatus",
-      "load_seconds": 12.8,
+      "load_seconds": 40.8,
       "error": null,
       "kind": "vue",
       "heading": "",
@@ -5855,6 +5829,7 @@
         "QUANTITY",
         "AVAILABLE QUANTITY",
         "ORDER QTY",
+        "RESERVED QTY",
         "PENDING QUANTITY"
       ],
       "total": null,
@@ -5871,1058 +5846,10 @@
       "name": "Stock > Exchange Stock",
       "path": "/crud/stock/exchangestock",
       "final_url": "/crud/stock/exchangestock",
-      "load_seconds": 2.0,
+      "load_seconds": 2.2,
       "error": null,
       "kind": "page",
       "heading": "Issue stock",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payg_paygdevice_index",
-      "name": "Payg > All Devices",
-      "path": "/payg/paygdevice/index",
-      "final_url": "/payg/paygdevice/index",
-      "load_seconds": 11.4,
-      "error": null,
-      "kind": "grid",
-      "heading": "PAYG DEVICES",
-      "columns": [
-        "ID",
-        "Serial Number",
-        "Holder",
-        "Holder Type",
-        "Track No",
-        "Carton Number",
-        "Created Date",
-        "Modified Date",
-        "Created By",
-        "Is Deleted",
-        "Device Status",
-        "Token Expiry Date",
-        "Bonus",
-        "Relock",
-        "H Power",
-        "Replace",
-        "Confirm Relock",
-        "Read",
-        "Compensation"
-      ],
-      "total": 36584,
-      "rows": 20,
-      "sort_keys": [
-        "id",
-        "serial_number",
-        "holder",
-        "holder_type",
-        "track_number",
-        "carton_number",
-        "created_date",
-        "modified_date",
-        "created_by",
-        "is_deleted",
-        "device_status",
-        "expiry_date",
-        "bonus"
-      ],
-      "filters": [
-        {
-          "name": "PaygDeviceSearch[id]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygDeviceSearch[serial_number]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygDeviceSearch[holder]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygDeviceSearch[holder_type]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygDeviceSearch[track_number]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygDeviceSearch[carton_number]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygDeviceSearch[created_date]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygDeviceSearch[modified_date]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygDeviceSearch[created_by]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygDeviceSearch[is_deleted]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygDeviceSearch[device_status]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygDeviceSearch[expiry_date]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygDeviceSearch[bonus]",
-          "tag": "input",
-          "type": "text"
-        }
-      ],
-      "has_pagination": true,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": "Create PayG device",
-      "create_path": "/payg/paygdevice/create",
-      "create_error": null,
-      "form_fields": [
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "paygdevice-serial_number",
-          "name": "PaygDevice[serial_number]",
-          "placeholder": "",
-          "required": false
-        },
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "paygdevice-device_status",
-          "name": "PaygDevice[device_status]",
-          "placeholder": "",
-          "required": false
-        }
-      ]
-    },
-    {
-      "id": "payg_paygdevice_defaultersportal",
-      "name": "Payg > Defaulters > Payg Defaulters",
-      "path": "/payg/paygdevice/defaultersportal",
-      "final_url": "/payg/paygdevice/defaultersportal",
-      "load_seconds": 37.3,
-      "error": null,
-      "kind": "table",
-      "heading": "PAYG DEFAULTERS PORTAL",
-      "columns": [
-        "#",
-        "CREATED DATE",
-        "WORKER NAME",
-        "DISTRICT",
-        "CUSTOMER NAME",
-        "SERIAL NUMBER",
-        "SOLD DATE",
-        "DAYS",
-        "C.DAYS",
-        "ELAPSED DAYS",
-        "MONTH",
-        "INSTALLMENT PAID",
-        "INSTALLMENT PERCENT",
-        "INSTALLMENT EXPECTED",
-        "INSTALLMENT REMAINING",
-        "TYPE"
-      ],
-      "total": null,
-      "rows": 10,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": "/crud/customer/view2?id=12077642",
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payg_paygdevice_paygcreditportal",
-      "name": "Payg > Defaulters > Credit Defaulters",
-      "path": "/payg/paygdevice/paygcreditportal",
-      "final_url": "/payg/paygdevice/paygcreditportal",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null,
-      "skip": true,
-      "notes": "Slow (>55s au 504 Gateway Time-out wakati wa discover 2026-10-09); ondoa skip kuijaribu"
-    },
-    {
-      "id": "payg_paygdevice_sosalesreport",
-      "name": "Payg > Sales Performance > Agents Performance",
-      "path": "/payg/paygdevice/sosalesreport",
-      "final_url": "/payg/paygdevice/sosalesreport",
-      "load_seconds": 27.3,
-      "error": null,
-      "kind": "table",
-      "heading": "SO PAYG PERFORMANCE",
-      "columns": [
-        "Name",
-        "Designation",
-        "District",
-        "Total Sold",
-        "last 30",
-        "Last 7",
-        "Fully paid",
-        "Active",
-        "Defaulters",
-        "Days Defaulted",
-        "Marked for Repossession",
-        "Repossessed",
-        "Tvs Sold",
-        "Replaced",
-        "Defaulters/Active",
-        "repossessed/sold",
-        "defaulters/sold",
-        "days default/active",
-        "replaced/sold"
-      ],
-      "total": null,
-      "rows": 810,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payg_paygdevice_tlsalesreport",
-      "name": "Payg > Sales Performance > TL Performance",
-      "path": "/payg/paygdevice/tlsalesreport",
-      "final_url": "/payg/paygdevice/tlsalesreport",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null,
-      "skip": true,
-      "notes": "Slow (>55s au 504 Gateway Time-out wakati wa discover 2026-10-09); ondoa skip kuijaribu"
-    },
-    {
-      "id": "payg_paygdevice_districtsalesreport",
-      "name": "Payg > Sales Performance > District Performance",
-      "path": "/payg/paygdevice/districtsalesreport",
-      "final_url": "/payg/paygdevice/districtsalesreport",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null,
-      "skip": true,
-      "notes": "Slow (>55s au 504 Gateway Time-out wakati wa discover 2026-10-09); ondoa skip kuijaribu"
-    },
-    {
-      "id": "payg_paygcredit_index",
-      "name": "Payg > Payg Credits > All Credits",
-      "path": "/payg/paygcredit/index",
-      "final_url": "/payg/paygcredit/index",
-      "load_seconds": 12.5,
-      "error": null,
-      "kind": "grid",
-      "heading": "PAYG CREDITS",
-      "columns": [
-        "ID",
-        "Serial Number",
-        "Amount",
-        "charges",
-        "interest",
-        "Created Date",
-        "Modified Date",
-        "State",
-        "Is Deleted",
-        "Created By"
-      ],
-      "total": 79,
-      "rows": 20,
-      "sort_keys": [
-        "id",
-        "serial_number",
-        "amount",
-        "charges",
-        "interest",
-        "created_date",
-        "modified_date",
-        "state",
-        "is_deleted",
-        "created_by"
-      ],
-      "filters": [
-        {
-          "name": "PaygCreditSearch[id]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygCreditSearch[serial_number]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygCreditSearch[amount]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygCreditSearch[charges]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygCreditSearch[interest]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygCreditSearch[created_date]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygCreditSearch[modified_date]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygCreditSearch[state]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygCreditSearch[is_deleted]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygCreditSearch[created_by]",
-          "tag": "select",
-          "type": "select-one"
-        }
-      ],
-      "has_pagination": true,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payg_paygdevice_creditcustomers",
-      "name": "Payg > Payg Credits > Credit Eligibles",
-      "path": "/payg/paygdevice/creditcustomers",
-      "final_url": "/payg/paygdevice/creditcustomers",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null,
-      "skip": true,
-      "notes": "Slow (>55s au 504 Gateway Time-out wakati wa discover 2026-10-09); ondoa skip kuijaribu"
-    },
-    {
-      "id": "payg_paygtoken_index",
-      "name": "Payg > Payg Token",
-      "path": "/payg/paygtoken/index",
-      "final_url": "/payg/paygtoken/index",
-      "load_seconds": 22.1,
-      "error": null,
-      "kind": "grid",
-      "heading": "PAYG TOKENS",
-      "columns": [
-        "ID",
-        "Command",
-        "Data",
-        "Serial Number",
-        "Count",
-        "Token",
-        "Token Type",
-        "Created Date",
-        "Is Deleted",
-        "State"
-      ],
-      "total": 102,
-      "rows": 20,
-      "sort_keys": [
-        "id",
-        "command",
-        "data",
-        "serial_number",
-        "count",
-        "token",
-        "token_type",
-        "created_date",
-        "is_deleted",
-        "state"
-      ],
-      "filters": [
-        {
-          "name": "PaygTokenSearch[id]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenSearch[command]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenSearch[data]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenSearch[serial_number]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenSearch[count]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenSearch[token]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenSearch[token_type]",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "name": "PaygTokenSearch[created_date]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenSearch[is_deleted]",
-          "tag": "select",
-          "type": "select-one"
-        }
-      ],
-      "has_pagination": true,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payg_paygtokenpayment_index",
-      "name": "Payg > Payg Token Payment",
-      "path": "/payg/paygtokenpayment/index",
-      "final_url": "/payg/paygtokenpayment/index",
-      "load_seconds": 18.4,
-      "error": null,
-      "kind": "grid",
-      "heading": "PAYG TOKEN PAYMENTS",
-      "columns": [
-        "ID",
-        "Token ID",
-        "Reference Code",
-        "Transaction Number",
-        "Amount",
-        "Total Amount",
-        "Payg Amount",
-        "Balance",
-        "Created Date",
-        "Is Deleted",
-        "Re-Assign"
-      ],
-      "total": 101,
-      "rows": 20,
-      "sort_keys": [
-        "id",
-        "token_id",
-        "reference_code",
-        "transaction_number",
-        "amount",
-        "total_amount",
-        "payg_amount",
-        "balance",
-        "created_date",
-        "is_deleted"
-      ],
-      "filters": [
-        {
-          "name": "PaygTokenPaymentSearch[id]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenPaymentSearch[token_id]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenPaymentSearch[reference_code]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenPaymentSearch[transaction_number]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenPaymentSearch[amount]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenPaymentSearch[total_amount]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenPaymentSearch[payg_amount]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenPaymentSearch[balance]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenPaymentSearch[created_date]",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "PaygTokenPaymentSearch[is_deleted]",
-          "tag": "input",
-          "type": "text"
-        }
-      ],
-      "has_pagination": true,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payg_paygdevice_outstandingreport",
-      "name": "Payg > Payg Reports > Outstanding Report",
-      "path": "/payg/paygdevice/outstandingreport",
-      "final_url": "/payg/paygdevice/outstandingreport",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null,
-      "skip": true,
-      "notes": "Slow (>55s au 504 Gateway Time-out wakati wa discover 2026-10-09); ondoa skip kuijaribu"
-    },
-    {
-      "id": "payg_paygdevice_paygsalessummary",
-      "name": "Payg > Payg Reports > Sales Summary",
-      "path": "/payg/paygdevice/paygsalessummary",
-      "final_url": "/payg/paygdevice/paygsalessummary",
-      "load_seconds": 15.0,
-      "error": null,
-      "kind": "table",
-      "heading": "PAYG SALES SUMMARY",
-      "columns": [
-        "#",
-        "Year Month",
-        "Sold",
-        "Fully Paid",
-        "Under Installment",
-        "Repossessed",
-        "Sale Price",
-        "Paid Amount",
-        "Repossession Revenue",
-        "Total Paid",
-        "Paid Percent",
-        "Remaining Balance",
-        "Lost Revenue",
-        "Reclaim Percent",
-        "AVG(Expected Days)"
-      ],
-      "total": null,
-      "rows": 39,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payg_paygdevice_paygdevicereport",
-      "name": "Payg > Payg Reports > Device Report",
-      "path": "/payg/paygdevice/paygdevicereport",
-      "final_url": "/payg/paygdevice/paygdevicereport",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null,
-      "skip": true,
-      "notes": "Slow (>55s au 504 Gateway Time-out wakati wa discover 2026-10-09); ondoa skip kuijaribu"
-    },
-    {
-      "id": "payg_paygdevice_repossessionreport",
-      "name": "Payg > Payg Reports > Repossession Report",
-      "path": "/payg/paygdevice/repossessionreport",
-      "final_url": "/payg/paygdevice/repossessionreport",
-      "load_seconds": 13.2,
-      "error": null,
-      "kind": "table",
-      "heading": "REPOSSESSION REPORT",
-      "columns": [
-        "#",
-        "Worker Name",
-        "CustomerID",
-        "Customer Name",
-        "Item Name",
-        "Quantity",
-        "Total Amount",
-        "Sale Type",
-        "District",
-        "Ward",
-        "Phone Number",
-        "Village",
-        "Sub-Village",
-        "Replacements",
-        "Created Date",
-        "Modified Date"
-      ],
-      "total": null,
-      "rows": 6,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payg_paygdevice_replacementreport",
-      "name": "Payg > Payg Reports > Replacement Report",
-      "path": "/payg/paygdevice/replacementreport",
-      "final_url": "/payg/paygdevice/replacementreport",
-      "load_seconds": 17.5,
-      "error": "An internal server error occurred",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payg_paygdevice_reposessionreport",
-      "name": "Payg > Payg Reports > Repossession Summary",
-      "path": "/payg/paygdevice/reposessionreport",
-      "final_url": "/payg/paygdevice/reposessionreport",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null,
-      "skip": true,
-      "notes": "Slow (>55s au 504 Gateway Time-out wakati wa discover 2026-10-09); ondoa skip kuijaribu"
-    },
-    {
-      "id": "payg_paygdevice_paygdevicesummary",
-      "name": "Payg > Payg Reports > Device Summary",
-      "path": "/payg/paygdevice/paygdevicesummary",
-      "final_url": "/payg/paygdevice/paygdevicesummary",
-      "load_seconds": 28.5,
-      "error": "An internal server error occurred",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payg_paygreportlog_chartsportal",
-      "name": "Payg > Payg Reports > Payg Charts",
-      "path": "/payg/paygreportlog/chartsportal",
-      "final_url": "/payg/paygreportlog/chartsportal",
-      "load_seconds": 108.6,
-      "error": null,
-      "kind": "page",
-      "heading": "PAYG CHARTS",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null,
-      "skip": true,
-      "notes": "Slow (>55s au 504 Gateway Time-out wakati wa discover 2026-10-09); ondoa skip kuijaribu"
-    },
-    {
-      "id": "crud_farmergroupvillage_index",
-      "name": "Agro > Retail > Farmer Groups > Group Villages",
-      "path": "/crud/farmergroupvillage/index",
-      "final_url": "/crud/farmergroupvillage/index",
-      "load_seconds": 1.8,
-      "error": null,
-      "kind": "vue",
-      "heading": "Farmer Group Villages",
-      "columns": [
-        "ID",
-        "NAME",
-        "DISTRICT",
-        "ACTIONS"
-      ],
-      "total": 19,
-      "rows": 19,
-      "sort_keys": [
-        "id",
-        "name",
-        "created_date"
-      ],
-      "filters": [
-        {
-          "label": "ID",
-          "name": "ID",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "Name",
-          "name": "Name",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "District",
-          "name": "district_id",
-          "tag": "select",
-          "type": "select-one"
-        }
-      ],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": true,
-      "add_button": "Add",
-      "create_path": "/crud/farmergroupvillage/create",
-      "create_error": null,
-      "form_fields": [
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "",
-          "name": "",
-          "placeholder": "Name",
-          "required": false
-        },
-        {
-          "tag": "select",
-          "type": "select-one",
-          "id": "district_id",
-          "name": "",
-          "placeholder": "",
-          "required": false
-        }
-      ]
-    },
-    {
-      "id": "crud_farmergroups_index",
-      "name": "Agro > Retail > Farmer Groups > All Farmer Groups",
-      "path": "/crud/farmergroups/index",
-      "final_url": "/crud/farmergroups/index",
-      "load_seconds": 1.7,
-      "error": null,
-      "kind": "vue",
-      "heading": "Farmer Groups",
-      "columns": [
-        "ID",
-        "GROUP NAME",
-        "PHONE NUMBER",
-        "LEADER",
-        "VILLAGE",
-        "DISTRICT",
-        "ONGEZA SHOP",
-        "CUSTOMER INFO",
-        "ACTIONS"
-      ],
-      "total": 37,
-      "rows": 20,
-      "sort_keys": [
-        "id",
-        "name",
-        "created_date"
-      ],
-      "filters": [
-        {
-          "label": "ID",
-          "name": "ID",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "Name",
-          "name": "Name",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "District",
-          "name": "district_id",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "label": "Group Leader",
-          "name": "group_leader_id",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "label": "Ongeza Shop",
-          "name": "worker_id",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "label": "Village",
-          "name": "village_id",
-          "tag": "select",
-          "type": "select-one"
-        }
-      ],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": true,
-      "add_button": "Add",
-      "create_path": "/crud/farmergroups/create",
-      "create_error": null,
-      "form_fields": [
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "",
-          "name": "",
-          "placeholder": "Group Name",
-          "required": false
-        },
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "",
-          "name": "",
-          "placeholder": "Phone Number",
-          "required": false
-        },
-        {
-          "tag": "select",
-          "type": "select-one",
-          "id": "village_id",
-          "name": "",
-          "placeholder": "",
-          "required": false
-        },
-        {
-          "tag": "select",
-          "type": "select-one",
-          "id": "worker_id",
-          "name": "",
-          "placeholder": "",
-          "required": false
-        },
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "",
-          "name": "",
-          "placeholder": "Farmer Name",
-          "required": false
-        },
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "",
-          "name": "",
-          "placeholder": "Farmer Phone",
-          "required": false
-        },
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "",
-          "name": "",
-          "placeholder": "Subsidy Number",
-          "required": false
-        }
-      ]
-    },
-    {
-      "id": "crud_farmergrouporder_index",
-      "name": "Agro > Retail > Farmer Groups > Group Orders",
-      "path": "/crud/farmergrouporder/index",
-      "final_url": "/crud/farmergrouporder/index",
-      "load_seconds": 2.1,
-      "error": null,
-      "kind": "vue",
-      "heading": "Farmer Group Orders",
-      "columns": [
-        "ID",
-        "REFERENCE NUMBER",
-        "GROUP NAME",
-        "ITEM COUNT",
-        "TOTAL QUANTITY",
-        "TOTAL AMOUNT",
-        "TOTAL PAID AMOUNT",
-        "STATUS",
-        "IS COLLECTED",
-        "ONGEZA SHOP",
-        "CUSTOMER ID",
-        "CREATED DATE",
-        "CREATED BY",
-        "ACTIONS"
-      ],
-      "total": 39,
-      "rows": 20,
-      "sort_keys": [
-        "id",
-        "name",
-        "created_date"
-      ],
-      "filters": [
-        {
-          "label": "ID",
-          "name": "ID",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "Group Name",
-          "name": "Name",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "Ongeza Shop",
-          "name": "worker_id",
-          "tag": "select",
-          "type": "select-one"
-        }
-      ],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": true,
-      "add_button": "Add",
-      "create_path": null,
-      "create_in_modal": true,
-      "form_fields": [
-        {
-          "tag": "select",
-          "type": "select-one",
-          "id": "worker_id",
-          "name": "",
-          "placeholder": "",
-          "required": false
-        }
-      ]
-    },
-    {
-      "id": "report_default_agroretailsummary",
-      "name": "Agro > Retail > Retail Reports > Agro Retail Summary",
-      "path": "/report/default/agroretailsummary?itemtype=2&category=1",
-      "final_url": "/report/default/agroretailsummary?itemtype=2&category=1",
-      "load_seconds": 12.9,
-      "error": "An internal server error occurred",
-      "kind": "page",
-      "heading": "",
       "columns": [],
       "total": null,
       "rows": 0,
@@ -6938,7 +5865,7 @@
       "name": "Finance > Upload Excel File",
       "path": "/crud/uploadfile",
       "final_url": "/crud/uploadfile",
-      "load_seconds": 1.6,
+      "load_seconds": 1.7,
       "error": null,
       "kind": "page",
       "heading": "",
@@ -6957,7 +5884,7 @@
       "name": "Finance > E-Money > All E-Money",
       "path": "/crud/payment/index2",
       "final_url": "/crud/payment/index2",
-      "load_seconds": 9.3,
+      "load_seconds": 5.3,
       "error": null,
       "kind": "vue",
       "heading": "Payments",
@@ -6979,7 +5906,7 @@
         "SHORTCODE",
         "ACTIONS"
       ],
-      "total": 3102483,
+      "total": 92327,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -7093,7 +6020,7 @@
       "name": "Finance > E-Money > E-Money Log",
       "path": "/crud/paymentlog/index?workerid=",
       "final_url": "/crud/paymentlog/index?workerid=",
-      "load_seconds": 24.6,
+      "load_seconds": 9.9,
       "error": null,
       "kind": "grid",
       "heading": "PAYMENT LOGS",
@@ -7106,8 +6033,8 @@
         "Created By",
         "Created Date"
       ],
-      "total": 57929,
-      "rows": 20,
+      "total": 14,
+      "rows": 14,
       "sort_keys": [
         "id",
         "payment_id",
@@ -7137,7 +6064,7 @@
           "type": "text"
         }
       ],
-      "has_pagination": true,
+      "has_pagination": false,
       "view_href": null,
       "vue_view": false,
       "add_button": "Create Payment Log",
@@ -7199,60 +6126,56 @@
       "name": "Finance > E-Money > NMB",
       "path": "/crud/nmb/index",
       "final_url": "/crud/nmb/index",
-      "load_seconds": 17.1,
+      "load_seconds": 2.2,
       "error": null,
-      "kind": "grid",
-      "heading": "",
+      "kind": "vue",
+      "heading": "NMB Transactions",
       "columns": [
-        "#",
-        "Transaction Number",
-        "Created Date",
-        "Narration",
-        "Amount",
-        "State",
-        "Processed Date",
-        "Processed By",
-        "Action"
+        "TRANSACTION NUMBER",
+        "DATE",
+        "NARRATION",
+        "AMOUNT",
+        "STATE",
+        "PROCESSED DATE",
+        "PROCESSED BY",
+        "ACTION"
       ],
-      "total": 69103,
+      "total": 70324,
       "rows": 20,
-      "sort_keys": [
-        "transaction_number",
-        "created_date",
-        "narration",
-        "amount",
-        "state",
-        "processed_date",
-        "processed_by"
-      ],
+      "sort_keys": [],
       "filters": [
         {
-          "name": "NmbSearch[transaction_number]",
+          "label": "State",
+          "name": "state",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "label": "Transaction Number",
+          "name": "Transaction number",
           "tag": "input",
           "type": "text"
         },
         {
-          "name": "NmbSearch[created_date]",
+          "label": "Narration",
+          "name": "Narration",
           "tag": "input",
           "type": "text"
         },
         {
-          "name": "NmbSearch[narration]",
+          "label": "Date",
+          "name": "created_date",
           "tag": "input",
           "type": "text"
         },
         {
-          "name": "NmbSearch[amount]",
+          "label": "Amount",
+          "name": "Amount",
           "tag": "input",
-          "type": "text"
-        },
-        {
-          "name": "NmbSearch[state]",
-          "tag": "input",
-          "type": "text"
+          "type": "number"
         }
       ],
-      "has_pagination": true,
+      "has_pagination": false,
       "view_href": null,
       "vue_view": false,
       "add_button": null
@@ -7262,7 +6185,7 @@
       "name": "Finance > E-Money > Reversed Payment",
       "path": "/crud/reversepayments/index",
       "final_url": "/crud/reversepayments/index",
-      "load_seconds": 3.9,
+      "load_seconds": 1.8,
       "error": null,
       "kind": "vue",
       "heading": "Reversed Payments",
@@ -7281,8 +6204,8 @@
         "STATE",
         "SHORTCODE"
       ],
-      "total": 19,
-      "rows": 19,
+      "total": 0,
+      "rows": 0,
       "sort_keys": [
         "id",
         "created_date"
@@ -7359,16 +6282,95 @@
       "name": "Finance > Manual Payments > All Manual Payments",
       "path": "/crud/payment/manual",
       "final_url": "/crud/payment/manual",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
+      "load_seconds": 43.2,
+      "error": null,
+      "kind": "grid",
+      "heading": "MANUAL PAYMENTS",
+      "columns": [
+        "ID",
+        "Date",
+        "Time",
+        "Provider",
+        "Worker Name",
+        "reference_code",
+        "Phone Number",
+        "Transaction Number",
+        "Amount",
+        "Created By",
+        "state"
+      ],
+      "total": 34,
+      "rows": 20,
+      "sort_keys": [
+        "id",
+        "date",
+        "time",
+        "provider",
+        "reference_code",
+        "phone_number",
+        "transaction_number",
+        "amount",
+        "created_by",
+        "state"
+      ],
+      "filters": [
+        {
+          "name": "PaymentSearch[id]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "PaymentSearch[date]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "PaymentSearch[time]",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "name": "PaymentSearch[provider]",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "name": "PaymentSearch[worker]",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "name": "PaymentSearch[reference_code]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "PaymentSearch[phone_number]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "PaymentSearch[transaction_number]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "PaymentSearch[amount]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "PaymentSearch[created_by]",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "name": "PaymentSearch[state]",
+          "tag": "select",
+          "type": "select-one"
+        }
+      ],
+      "has_pagination": true,
       "view_href": null,
       "vue_view": false,
       "add_button": null,
@@ -7380,7 +6382,7 @@
       "name": "Finance > Manual Payments > Pending Payments",
       "path": "/crud/payment/approvepayment",
       "final_url": "/crud/payment/approvepayment",
-      "load_seconds": 18.4,
+      "load_seconds": 5.4,
       "error": null,
       "kind": "grid",
       "heading": "PENDING MANUAL PAYMENTS",
@@ -7421,17 +6423,89 @@
       "name": "Finance > Manual Payments > Confirmed Payments",
       "path": "/crud/confirmedpayment/index",
       "final_url": "/crud/confirmedpayment/index",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
+      "load_seconds": 46.3,
+      "error": null,
+      "kind": "grid",
+      "heading": "CONFIRMED PAYMENTS",
+      "columns": [
+        "ID",
+        "Date",
+        "Time",
+        "Provider",
+        "Worker Name",
+        "Reference Code",
+        "Phone Number",
+        "Transaction Number",
+        "Amount",
+        "Created By"
+      ],
+      "total": 406,
+      "rows": 20,
+      "sort_keys": [
+        "id",
+        "date",
+        "time",
+        "provider",
+        "reference_code",
+        "phone_number",
+        "transaction_number",
+        "amount",
+        "created_by"
+      ],
+      "filters": [
+        {
+          "name": "ConfirmedPaymentSearch[id]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "ConfirmedPaymentSearch[date]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "ConfirmedPaymentSearch[time]",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "name": "ConfirmedPaymentSearch[provider]",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "name": "ConfirmedPaymentSearch[worker]",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "name": "ConfirmedPaymentSearch[reference_code]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "ConfirmedPaymentSearch[phone_number]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "ConfirmedPaymentSearch[transaction_number]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "ConfirmedPaymentSearch[amount]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "ConfirmedPaymentSearch[created_by]",
+          "tag": "select",
+          "type": "select-one"
+        }
+      ],
+      "has_pagination": true,
+      "view_href": "/crud/confirmedpayment/view?id=902019",
       "vue_view": false,
       "add_button": null,
       "skip": true,
@@ -7442,7 +6516,7 @@
       "name": "Finance > Service Payments > Invalid Payments",
       "path": "/payg/paygtokenpayment/invaliddeposit2",
       "final_url": "/payg/paygtokenpayment/invaliddeposit2",
-      "load_seconds": 22.7,
+      "load_seconds": 37.2,
       "error": null,
       "kind": "vue",
       "heading": "PAYG-Invalid Deposit",
@@ -7457,7 +6531,7 @@
         "STATE",
         "ACTIONS"
       ],
-      "total": 1105,
+      "total": 1111,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -7505,7 +6579,7 @@
       "name": "Finance > Service Payments > Unassigned TokenPayment",
       "path": "/payg/paygtokenpayment/unassigned2",
       "final_url": "/payg/paygtokenpayment/unassigned2",
-      "load_seconds": 25.1,
+      "load_seconds": 33.7,
       "error": null,
       "kind": "vue",
       "heading": "PAYG-UNASSIGNED",
@@ -7520,7 +6594,7 @@
         "STATE",
         "ACTIONS"
       ],
-      "total": 4766,
+      "total": 4815,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -7574,7 +6648,7 @@
       "name": "Finance > Service Payments > No-Sale Payments",
       "path": "/payg/paygtokenpayment/nosale2",
       "final_url": "/payg/paygtokenpayment/nosale2",
-      "load_seconds": 28.3,
+      "load_seconds": 31.1,
       "error": null,
       "kind": "vue",
       "heading": "PAYG-UNASSIGNED",
@@ -7637,7 +6711,7 @@
       "name": "Finance > Service Payments > Unassigned Payments",
       "path": "/crud/payment/unassigned2",
       "final_url": "/crud/payment/unassigned2",
-      "load_seconds": 27.5,
+      "load_seconds": 30.7,
       "error": null,
       "kind": "vue",
       "heading": "PAYG-UNASSIGNED",
@@ -7652,7 +6726,7 @@
         "STATE",
         "ACTIONS"
       ],
-      "total": 4265,
+      "total": 4278,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -7700,7 +6774,7 @@
       "name": "Finance > Service Payments > Order Payments",
       "path": "/crud/payment/orderpayments2",
       "final_url": "/crud/payment/orderpayments2",
-      "load_seconds": 36.7,
+      "load_seconds": 28.9,
       "error": null,
       "kind": "vue",
       "heading": "Order Payments",
@@ -7716,7 +6790,7 @@
         "STATE",
         "ACTIONS"
       ],
-      "total": 74131,
+      "total": 76611,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -7764,7 +6838,7 @@
       "name": "Finance > Budget > Create Budget",
       "path": "/payroll/budgetexpenses/createbudget",
       "final_url": "/payroll/budgetexpenses/createbudget",
-      "load_seconds": 2.8,
+      "load_seconds": 2.0,
       "error": null,
       "kind": "page",
       "heading": "",
@@ -7783,7 +6857,7 @@
       "name": "Finance > Budget > Budget Approximate",
       "path": "/payroll/budgetexpenses/index2",
       "final_url": "/payroll/budgetexpenses/index2",
-      "load_seconds": 3.5,
+      "load_seconds": 2.3,
       "error": null,
       "kind": "vue",
       "heading": "Budget",
@@ -7828,16 +6902,105 @@
       "view_href": null,
       "vue_view": true,
       "add_button": "Add",
-      "create_path": null,
-      "create_in_modal": true,
-      "form_fields": []
+      "create_path": "/payroll/budgetexpenses/createbudget",
+      "create_error": null,
+      "form_fields": [
+        {
+          "tag": "input",
+          "type": "checkbox",
+          "id": "flexSwitchCheckChecked",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "Purpose of Budget",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
+          "id": "district_id",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
+          "id": "ward_id",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
+          "id": "organization_sender",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "select",
+          "type": "select-one",
+          "id": "category_id0",
+          "name": "",
+          "placeholder": "",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "id": "",
+          "name": "",
+          "placeholder": "Unit Price",
+          "required": false
+        },
+        {
+          "tag": "textarea",
+          "type": "textarea",
+          "id": "notes0",
+          "name": "",
+          "placeholder": "Notes",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "date",
+          "id": "date_exp0",
+          "name": "",
+          "placeholder": "Start Date",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "date",
+          "id": "end_date0",
+          "name": "",
+          "placeholder": "End Date",
+          "required": false
+        },
+        {
+          "tag": "input",
+          "type": "number",
+          "id": "",
+          "name": "",
+          "placeholder": "No of days",
+          "required": false
+        }
+      ]
     },
     {
       "id": "payroll_budgetexpenses_indexadmin2",
       "name": "Finance > Budget > Budget Approval",
       "path": "/payroll/budgetexpenses/indexadmin2",
       "final_url": "/payroll/budgetexpenses/indexadmin2",
-      "load_seconds": 8.5,
+      "load_seconds": 2.4,
       "error": null,
       "kind": "vue",
       "heading": "BUDGET APPROVE - SUPERVISOR",
@@ -7845,7 +7008,9 @@
         "ID",
         "REFERENCE #",
         "CATEGORY",
-        "WORKER",
+        "ORG KEY",
+        "REQUESTED BY",
+        "ON BEHALF OF",
         "PARTICULAR",
         "NOTES",
         "UNIT PRICE",
@@ -7855,7 +7020,7 @@
         "IS APPROVED",
         "ACTIONS"
       ],
-      "total": 8666,
+      "total": 6724,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -7885,6 +7050,18 @@
           "name": "organization_sender",
           "tag": "select",
           "type": "select-one"
+        },
+        {
+          "label": "",
+          "name": "org_key",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "label": "",
+          "name": "approval",
+          "tag": "select",
+          "type": "select-one"
         }
       ],
       "has_pagination": false,
@@ -7897,7 +7074,7 @@
       "name": "Finance > Budget > Budget Return",
       "path": "/payroll/budgetexpenses/indexreturn2",
       "final_url": "/payroll/budgetexpenses/indexreturn2",
-      "load_seconds": 2.6,
+      "load_seconds": 2.3,
       "error": null,
       "kind": "vue",
       "heading": "RETURNED BUDGET- INDEX",
@@ -7950,7 +7127,7 @@
       "name": "Finance > Budget > Sales Point Budget",
       "path": "/payroll/retailbudget/index",
       "final_url": "/payroll/retailbudget/index",
-      "load_seconds": 2.3,
+      "load_seconds": 1.7,
       "error": null,
       "kind": "vue",
       "heading": "Retail Budget",
@@ -8116,7 +7293,7 @@
       "name": "Finance > Budget > Budget Summary",
       "path": "/payroll/budgetexpenses/indexsummary2",
       "final_url": "/payroll/budgetexpenses/indexsummary2",
-      "load_seconds": 23.9,
+      "load_seconds": 4.9,
       "error": null,
       "kind": "page",
       "heading": "",
@@ -8135,7 +7312,7 @@
       "name": "Finance > Budget > Non-Budget Expenses",
       "path": "/payroll/budgetexpenses/indexnonbudget",
       "final_url": "/payroll/budgetexpenses/indexnonbudget",
-      "load_seconds": 25.8,
+      "load_seconds": 4.5,
       "error": null,
       "kind": "grid",
       "heading": "October, 2026",
@@ -8213,13 +7390,16 @@
       "name": "Finance > Finance Reports > Payments Per Provider",
       "path": "/crud/payment/provider",
       "final_url": "/crud/payment/provider",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
+      "load_seconds": 8.5,
+      "error": null,
+      "kind": "table",
+      "heading": "PAYMENTS PER PROVIDER",
+      "columns": [
+        "Provider",
+        "Amount"
+      ],
       "total": null,
-      "rows": 0,
+      "rows": 3,
       "sort_keys": [],
       "filters": [],
       "has_pagination": false,
@@ -8234,13 +7414,16 @@
       "name": "Finance > Finance Reports > Cash Collected",
       "path": "/crud/sale/cashcollected?workerid=",
       "final_url": "/crud/sale/cashcollected?workerid=",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
+      "load_seconds": 13.0,
+      "error": null,
+      "kind": "table",
+      "heading": "CASH COLLECTED",
+      "columns": [
+        "Item Name",
+        "Amount"
+      ],
       "total": null,
-      "rows": 0,
+      "rows": 1,
       "sort_keys": [],
       "filters": [],
       "has_pagination": false,
@@ -8255,479 +7438,6 @@
       "name": "Finance > Finance Reports > Profit & Loss Report",
       "path": "/payroll/budgetexpenses/indexprofitloss",
       "final_url": "/payroll/budgetexpenses/indexprofitloss",
-      "load_seconds": 23.6,
-      "error": null,
-      "kind": "table",
-      "heading": "PROFIT AND LOSS REPORT",
-      "columns": [
-        "Arumeru",
-        "Arusha",
-        "ArushaMjini",
-        "Babati Mjini",
-        "Babati vijijini",
-        "Bagamoyo",
-        "Bahi",
-        "Bariadi",
-        "Biharamulo",
-        "Buhigwe",
-        "Bukoba",
-        "Bukombe",
-        "Bunda",
-        "Busega",
-        "Butiama",
-        "Chamwino",
-        "Chato",
-        "Chemba",
-        "Chunya",
-        "Dodoma",
-        "Gairo",
-        "Geita",
-        "Hai",
-        "Hanang",
-        "Handeni",
-        "Igunga",
-        "Ikungi",
-        "Ilala",
-        "Ileje",
-        "Ilemela",
-        "Iramba",
-        "Iringa",
-        "Itigi",
-        "Itilima",
-        "Kahama Mjini",
-        "Kakonko",
-        "Kalambo",
-        "Kaliua",
-        "Karagwe",
-        "Karatu",
-        "Kasulu",
-        "Kibaha",
-        "Kibaigwa",
-        "Kibiti",
-        "Kibondo",
-        "Kigamboni",
-        "Kigoma",
-        "Kilindi",
-        "Kilolo",
-        "Kilombero",
-        "Kilosa",
-        "Kilwa",
-        "Kinondoni",
-        "Kisarawe",
-        "Kishapu",
-        "Kiteto",
-        "Kondoa",
-        "Kongwa",
-        "Korogwe",
-        "Kwimba",
-        "Kyela",
-        "Kyerwa",
-        "Lindi",
-        "Liwale",
-        "Ludewa",
-        "Lushoto",
-        "Mafia",
-        "Magu",
-        "Makete",
-        "Malinyi",
-        "Manyara",
-        "Manyoni",
-        "Masasi",
-        "Maswa",
-        "Mbarali",
-        "Mbeya",
-        "Mbinga",
-        "Mbogwe",
-        "Mbozi",
-        "Mbulu",
-        "Meatu",
-        "Missenyi",
-        "Misungwi",
-        "Mkalama",
-        "Mkinga",
-        "Mkuranga",
-        "Mlele",
-        "Momba",
-        "Monduli",
-        "Morogoro",
-        "Moshi",
-        "Mpanda",
-        "Mpwapwa",
-        "Mtwara",
-        "Mufindi",
-        "Muheza",
-        "Muleba",
-        "Musoma",
-        "Mvomero",
-        "Mwanga",
-        "Nachingwea",
-        "Namtumbo",
-        "Nanyumbu",
-        "Newala",
-        "Ngara",
-        "Njombe",
-        "Nkasi",
-        "Nyamagana",
-        "Nyang'hwale",
-        "Nyasa",
-        "Nzega",
-        "Pangani",
-        "Rombo",
-        "Rorya",
-        "Ruangwa",
-        "Rufiji",
-        "Rungwe",
-        "Same",
-        "Sengerema",
-        "Serengeti",
-        "Shinyanga Mjini",
-        "Shinyanga rural",
-        "Siha",
-        "Sikonge",
-        "Simanjiro",
-        "SingidaMjini",
-        "SingidaRural",
-        "Songea",
-        "Songwe",
-        "Sumbawanga",
-        "Tabora",
-        "Tandahimba",
-        "Tanga",
-        "Tanganyika",
-        "Tarime",
-        "Temeke",
-        "Tunduru",
-        "Ubungo",
-        "Ukerewe",
-        "Ulanga",
-        "Urambo",
-        "Uvinza",
-        "Uyui",
-        "Wanging'o Mbe",
-        "Totals"
-      ],
-      "total": null,
-      "rows": 26,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payroll_budgetexpenses_annualreport",
-      "name": "Finance > Finance Reports > Annual Report",
-      "path": "/payroll/budgetexpenses/annualreport",
-      "final_url": "/payroll/budgetexpenses/annualreport",
-      "load_seconds": 16.3,
-      "error": "An internal server error occurred",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payroll_workerbehavioragent_defaulterssnapshots",
-      "name": "Finance > Payroll > Defaulter snapshots",
-      "path": "/payroll/workerbehavioragent/defaulterssnapshots",
-      "final_url": "/payroll/workerbehavioragent/defaulterssnapshots",
-      "load_seconds": 2.1,
-      "error": null,
-      "kind": "vue",
-      "heading": "DEFAULTERS SNAPSHOT",
-      "columns": [
-        "SERIAL NO",
-        "SALE TYPE",
-        "TYPE",
-        "TOTAL AMOUNT",
-        "DAILY AMOUNT",
-        "PRICE",
-        "INSTALLMENT PAID",
-        "ELAPSED DAYS",
-        "EXPIRY DAYS",
-        "SALE DATE"
-      ],
-      "total": 5971,
-      "rows": 20,
-      "sort_keys": [
-        "id",
-        "-id"
-      ],
-      "filters": [
-        {
-          "label": "Serial Number",
-          "name": "Status",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "Type",
-          "name": "type",
-          "tag": "select",
-          "type": "select-one"
-        }
-      ],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payroll_workerbehavioragent_workermonthlycommission",
-      "name": "Finance > Payroll > Worker Monthly Commission",
-      "path": "/payroll/workerbehavioragent/workermonthlycommission",
-      "final_url": "/payroll/workerbehavioragent/workermonthlycommission",
-      "load_seconds": 2.5,
-      "error": null,
-      "kind": "vue",
-      "heading": "WORKER MONTHLY COMMISSION",
-      "columns": [
-        "WORKER ID",
-        "WORKER NAME",
-        "USERNAME",
-        "DESIGNATION",
-        "SUPERVISOR",
-        "DESIGNATION CATEGORY",
-        "QTY SOLD",
-        "DEFAULTERS",
-        "TYPE",
-        "START DATE",
-        "END DATE",
-        "TOTAL AMOUNT",
-        "PHONE NUMBER",
-        "STATUS",
-        "AP. BY",
-        "PD. BY",
-        "PD. DATE",
-        "ACTIONS"
-      ],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [
-        "id",
-        "approved_date"
-      ],
-      "filters": [
-        {
-          "label": "Start Date",
-          "name": "from",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "End Date",
-          "name": "to",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "Status",
-          "name": "status",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "label": "Supervisor",
-          "name": "supervisor_name",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "label": "Worker",
-          "name": "worker_name",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "label": "Designation Category",
-          "name": "designation_category",
-          "tag": "select",
-          "type": "select-one"
-        }
-      ],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payroll_workerbehavioragent_workerweeklytransportallowances",
-      "name": "Finance > Payroll > Worker Transport Allowances",
-      "path": "/payroll/workerbehavioragent/workerweeklytransportallowances",
-      "final_url": "/payroll/workerbehavioragent/workerweeklytransportallowances",
-      "load_seconds": 2.4,
-      "error": null,
-      "kind": "vue",
-      "heading": "WEEKLY TRANSPORT ALLOWANCES",
-      "columns": [
-        "WORKER NAME",
-        "USERNAME",
-        "DESIGNATION",
-        "SUPERVISOR",
-        "QTY SOLD",
-        "DEFAULTERS",
-        "TYPE",
-        "START DATE",
-        "END DATE",
-        "TOTAL AMOUNT",
-        "PHONE NUMBER",
-        "STATUS",
-        "AP. BY",
-        "PD. BY",
-        "PD. DATE",
-        "ACTIONS"
-      ],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [
-        "id",
-        "approved_date",
-        "id",
-        "-id"
-      ],
-      "filters": [
-        {
-          "label": "Start Date",
-          "name": "from",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "End Date",
-          "name": "to",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "Status",
-          "name": "status",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "label": "Supervisor",
-          "name": "supervisor_name",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "label": "Worker",
-          "name": "worker_name",
-          "tag": "select",
-          "type": "select-one"
-        },
-        {
-          "label": "Designation Category",
-          "name": "designation_category",
-          "tag": "select",
-          "type": "select-one"
-        }
-      ],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payroll_workerbehavioragent_index",
-      "name": "Finance > Payroll > Agents Payroll",
-      "path": "/payroll/workerbehavioragent/index",
-      "final_url": "/payroll/workerbehavioragent/index",
-      "load_seconds": 54.5,
-      "error": null,
-      "kind": "grid",
-      "heading": "PAYROLL MONTHLY",
-      "columns": [
-        "#",
-        "FULL NAME",
-        "DESIGNATION",
-        "DESIGNATION CATEGORY",
-        "DISTRICT",
-        "QTY",
-        "O.BALANCE",
-        "DEFAULTERS",
-        "PHONE",
-        "R.PENALTY",
-        "NP.COMMISSION",
-        "P.COMMISSION",
-        "P.BONUS",
-        "P.BONUS-PAID",
-        "B.SALARY",
-        "P.AMOUNT",
-        "STATUS",
-        "A-BY",
-        "P-BY"
-      ],
-      "total": 645,
-      "rows": 500,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": true,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "crud_worker_workertransportallowances",
-      "name": "Finance > Payroll > Transport Allowances",
-      "path": "/crud/worker/workertransportallowances",
-      "final_url": "/crud/worker/workertransportallowances",
-      "load_seconds": 18.9,
-      "error": null,
-      "kind": "grid",
-      "heading": "TRANSPORT ALLOWANCES",
-      "columns": [
-        "#",
-        "Worker ID",
-        "Worker Name",
-        "Designation",
-        "Designation Category",
-        "Outstanding Balance",
-        "Defaulters Total",
-        "Qty Sold",
-        "Total Amount",
-        "Pending Amount",
-        "Phone Number",
-        "Status",
-        "AP.By",
-        "PD.By"
-      ],
-      "total": 699,
-      "rows": 699,
-      "sort_keys": [
-        "worker_id",
-        "worker_name",
-        "designation",
-        "status",
-        "outstanding_balance",
-        "defaulters_total",
-        "qty_sold",
-        "total_amount",
-        "pending_amount",
-        "phone_number",
-        "status",
-        "approved_by",
-        "paid_by"
-      ],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "payg_paygdevice_sobonusreport",
-      "name": "Finance > Payroll > Fully Paid Bonus",
-      "path": "/payg/paygdevice/sobonusreport",
-      "final_url": "/payg/paygdevice/sobonusreport",
       "load_seconds": 60.9,
       "error": "504 Gateway Time-out",
       "kind": "page",
@@ -8740,17 +7450,15 @@
       "has_pagination": false,
       "view_href": null,
       "vue_view": false,
-      "add_button": null,
-      "skip": true,
-      "notes": "Slow (>55s au 504 Gateway Time-out wakati wa discover 2026-10-09); ondoa skip kuijaribu"
+      "add_button": null
     },
     {
-      "id": "payg_paygdevice_workerdeductions",
-      "name": "Finance > Payroll > Worker deduction",
-      "path": "/payg/paygdevice/workerdeductions",
-      "final_url": "/payg/paygdevice/workerdeductions",
-      "load_seconds": 17.8,
-      "error": null,
+      "id": "payroll_budgetexpenses_annualreport",
+      "name": "Finance > Finance Reports > Annual Report",
+      "path": "/payroll/budgetexpenses/annualreport",
+      "final_url": "/payroll/budgetexpenses/annualreport",
+      "load_seconds": 5.9,
+      "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
       "columns": [],
@@ -8768,7 +7476,7 @@
       "name": "Finance > Solar reconciliation",
       "path": "/payg/paygtokenpayment/solarreconciliation",
       "final_url": "/payg/paygtokenpayment/solarreconciliation",
-      "load_seconds": 3.8,
+      "load_seconds": 4.2,
       "error": null,
       "kind": "page",
       "heading": "SOLAR RECONCILIATION",
@@ -8784,10 +7492,10 @@
     },
     {
       "id": "crud_auditreview_index",
-      "name": "Audit > All Audits",
+      "name": "AUDIT > All Audits",
       "path": "/crud/auditreview/index",
       "final_url": "/crud/auditreview/index",
-      "load_seconds": 2.4,
+      "load_seconds": 1.9,
       "error": null,
       "kind": "vue",
       "heading": "All Audit Review",
@@ -8802,7 +7510,7 @@
         "AUDIT COMPLETED AT",
         "ACTIONS"
       ],
-      "total": 446,
+      "total": 514,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -8851,7 +7559,7 @@
       "name": "Zones > District",
       "path": "/crud/district/index?workerid=",
       "final_url": "/crud/district/index?workerid=",
-      "load_seconds": 54.5,
+      "load_seconds": 9.1,
       "error": null,
       "kind": "grid",
       "heading": "DISTRICTS",
@@ -8957,7 +7665,7 @@
       "name": "Zones > Ward",
       "path": "/crud/ward/index?workerid=",
       "final_url": "/crud/ward/index?workerid=",
-      "load_seconds": 32.6,
+      "load_seconds": 5.3,
       "error": null,
       "kind": "table",
       "heading": "WARDS",
@@ -8973,7 +7681,7 @@
       "sort_keys": [],
       "filters": [],
       "has_pagination": true,
-      "view_href": "/crud/ward/view?id=4521",
+      "view_href": "/crud/ward/view?id=4523",
       "vue_view": false,
       "add_button": "Create Ward",
       "create_path": "/crud/ward/create",
@@ -9010,7 +7718,7 @@
       "name": "Zones > Village",
       "path": "/crud/village/index?workerid=",
       "final_url": "/crud/village/index?workerid=",
-      "load_seconds": 30.1,
+      "load_seconds": 6.2,
       "error": null,
       "kind": "table",
       "heading": "VILLAGES",
@@ -9021,11 +7729,11 @@
         "Created By"
       ],
       "total": null,
-      "rows": 2,
+      "rows": 0,
       "sort_keys": [],
       "filters": [],
       "has_pagination": false,
-      "view_href": "/crud/village/view?id=1",
+      "view_href": null,
       "vue_view": false,
       "add_button": "Create Village",
       "create_path": "/crud/village/create",
@@ -9054,7 +7762,7 @@
       "name": "Zones > Warehouse",
       "path": "/crud/warehouse/index?workerid=",
       "final_url": "/crud/warehouse/index?workerid=",
-      "load_seconds": 29.3,
+      "load_seconds": 5.3,
       "error": null,
       "kind": "table",
       "heading": "WAREHOUSES",
@@ -9067,10 +7775,10 @@
         "Created By"
       ],
       "total": null,
-      "rows": 20,
+      "rows": 7,
       "sort_keys": [],
       "filters": [],
-      "has_pagination": true,
+      "has_pagination": false,
       "view_href": null,
       "vue_view": false,
       "add_button": "Create Warehouse",
@@ -9105,10 +7813,10 @@
     },
     {
       "id": "crud_ticket_index",
-      "name": "Tickets 0 > My Tickets",
+      "name": "0 Tickets > My Tickets",
       "path": "/crud/ticket/index",
       "final_url": "/crud/ticket/index",
-      "load_seconds": 36.6,
+      "load_seconds": 9.2,
       "error": null,
       "kind": "grid",
       "heading": "MY TICKETS",
@@ -9247,19 +7955,99 @@
     },
     {
       "id": "crud_ticket_indexall",
-      "name": "Tickets 0 > All Tickets",
+      "name": "0 Tickets > All Tickets",
       "path": "/crud/ticket/indexall",
       "final_url": "/crud/ticket/indexall",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
+      "load_seconds": 9.0,
+      "error": null,
+      "kind": "grid",
+      "heading": "ALL TICKETS",
+      "columns": [
+        "ID",
+        "Category",
+        "Category ID",
+        "Assignee",
+        "Created Date",
+        "Valid",
+        "Created By",
+        "Status",
+        "Remark",
+        "Description",
+        "Modified Date"
+      ],
+      "total": 5565,
+      "rows": 20,
+      "sort_keys": [
+        "id",
+        "category",
+        "category_item_id",
+        "assignee",
+        "created_date",
+        "is_deleted",
+        "created_by",
+        "status",
+        "remark",
+        "description",
+        "modified_date"
+      ],
+      "filters": [
+        {
+          "name": "TicketSearch[id]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "TicketSearch[category]",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "name": "TicketSearch[category_item_id]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "TicketSearch[assignee]",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "name": "TicketSearch[created_date]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "TicketSearch[is_deleted]",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "name": "TicketSearch[created_by]",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "name": "TicketSearch[status]",
+          "tag": "select",
+          "type": "select-one"
+        },
+        {
+          "name": "TicketSearch[remark]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "TicketSearch[description]",
+          "tag": "input",
+          "type": "text"
+        },
+        {
+          "name": "TicketSearch[modified_date]",
+          "tag": "input",
+          "type": "text"
+        }
+      ],
+      "has_pagination": true,
       "view_href": null,
       "vue_view": false,
       "add_button": null,
@@ -9271,7 +8059,7 @@
       "name": "Sms > Inbox",
       "path": "/sms/inbox/index",
       "final_url": "/sms/inbox/index",
-      "load_seconds": 30.4,
+      "load_seconds": 5.2,
       "error": null,
       "kind": "grid",
       "heading": "INBOXES",
@@ -9389,7 +8177,7 @@
       "name": "Sms > Outbox",
       "path": "/sms/outbox/index",
       "final_url": "/sms/outbox/index",
-      "load_seconds": 27.8,
+      "load_seconds": 5.2,
       "error": null,
       "kind": "grid",
       "heading": "OUTBOXES",
@@ -9483,7 +8271,7 @@
       "name": "Sms > Sent SMS",
       "path": "/sms/sentsms/index",
       "final_url": "/sms/sentsms/index",
-      "load_seconds": 27.9,
+      "load_seconds": 5.3,
       "error": null,
       "kind": "grid",
       "heading": "SENT SMS",
@@ -9547,7 +8335,7 @@
       "name": "Sms > Bulk SMS > SMS Workers",
       "path": "/sms/outbox/smsworkers",
       "final_url": "/sms/outbox/smsworkers",
-      "load_seconds": 28.1,
+      "load_seconds": 5.4,
       "error": null,
       "kind": "page",
       "heading": "SMS WORKERS",
@@ -9566,7 +8354,7 @@
       "name": "Sms > Bulk SMS > SMS TLs",
       "path": "/sms/outbox/smstls",
       "final_url": "/sms/outbox/smstls",
-      "load_seconds": 29.3,
+      "load_seconds": 5.2,
       "error": null,
       "kind": "page",
       "heading": "SMS TLS",
@@ -9585,7 +8373,7 @@
       "name": "Sms > Bulk SMS > SMS Customer",
       "path": "/sms/outbox/smscustomers",
       "final_url": "/sms/outbox/smscustomers",
-      "load_seconds": 28.1,
+      "load_seconds": 5.3,
       "error": null,
       "kind": "page",
       "heading": "SMS CUSTOMERS",
@@ -9604,7 +8392,7 @@
       "name": "Sms > Bulk SMS > Bulk Groups",
       "path": "/sms/bulkgroup/index",
       "final_url": "/sms/bulkgroup/index",
-      "load_seconds": 27.8,
+      "load_seconds": 5.0,
       "error": null,
       "kind": "grid",
       "heading": "BULK GROUPS",
@@ -9652,7 +8440,7 @@
       "name": "Sms > Bulk SMS > Import SMS",
       "path": "/sms/outbox/upload",
       "final_url": "/sms/outbox/upload",
-      "load_seconds": 3.9,
+      "load_seconds": 1.5,
       "error": null,
       "kind": "page",
       "heading": "",
@@ -9671,7 +8459,7 @@
       "name": "Sms > Bulk SMS > GCM SMS",
       "path": "/sms/default/gcm",
       "final_url": "/sms/default/gcm",
-      "load_seconds": 29.3,
+      "load_seconds": 5.1,
       "error": null,
       "kind": "page",
       "heading": "GCM SMS",
@@ -9690,7 +8478,7 @@
       "name": "Sms > Contacts > All Contacts",
       "path": "/sms/contact/index",
       "final_url": "/sms/contact/index",
-      "load_seconds": 26.9,
+      "load_seconds": 5.0,
       "error": null,
       "kind": "grid",
       "heading": "CONTACTS",
@@ -9767,7 +8555,7 @@
       "name": "Sms > Contacts > Import Contacts",
       "path": "/sms/contact/upload",
       "final_url": "/sms/contact/upload",
-      "load_seconds": 27.6,
+      "load_seconds": 5.0,
       "error": null,
       "kind": "page",
       "heading": "UPLOAD CONTACTS",
@@ -9786,7 +8574,7 @@
       "name": "Sms > Settings > SMS Category",
       "path": "/sms/smscategory/index",
       "final_url": "/sms/smscategory/index",
-      "load_seconds": 27.2,
+      "load_seconds": 4.4,
       "error": null,
       "kind": "grid",
       "heading": "SMS CATEGORIES",
@@ -9794,8 +8582,8 @@
         "ID",
         "Name"
       ],
-      "total": 109,
-      "rows": 20,
+      "total": null,
+      "rows": 0,
       "sort_keys": [
         "id",
         "name"
@@ -9812,8 +8600,8 @@
           "type": "text"
         }
       ],
-      "has_pagination": true,
-      "view_href": "/sms/smscategory/view?id=218",
+      "has_pagination": false,
+      "view_href": null,
       "vue_view": false,
       "add_button": "Create Sms Category",
       "create_path": "/sms/smscategory/create",
@@ -9834,7 +8622,7 @@
       "name": "Sms > Settings > SMS Template",
       "path": "/sms/template/index",
       "final_url": "/sms/template/index",
-      "load_seconds": 27.3,
+      "load_seconds": 5.1,
       "error": null,
       "kind": "grid",
       "heading": "TEMPLATES",
@@ -9843,8 +8631,8 @@
         "Name",
         "Message"
       ],
-      "total": 150,
-      "rows": 20,
+      "total": null,
+      "rows": 0,
       "sort_keys": [
         "id",
         "name",
@@ -9867,8 +8655,8 @@
           "type": "text"
         }
       ],
-      "has_pagination": true,
-      "view_href": "/sms/template/view?id=167",
+      "has_pagination": false,
+      "view_href": null,
       "vue_view": false,
       "add_button": "Create Template",
       "create_path": "/sms/template/create",
@@ -9897,7 +8685,7 @@
       "name": "Sms > Settings > SMS Senders",
       "path": "/sms/sms-sender/index",
       "final_url": "/sms/sms-sender/index",
-      "load_seconds": 2.8,
+      "load_seconds": 2.0,
       "error": null,
       "kind": "vue",
       "heading": "SMS Senders",
@@ -9977,7 +8765,7 @@
       "name": "Sms > Notification",
       "path": "/sms/workernotification/index",
       "final_url": "/sms/workernotification/index",
-      "load_seconds": 26.2,
+      "load_seconds": 5.2,
       "error": null,
       "kind": "grid",
       "heading": "WORKER NOTIFICATIONS",
@@ -10115,7 +8903,7 @@
       "name": "Sms > SMS Reports > SMS Summary",
       "path": "/sms/default/index",
       "final_url": "/sms/default/index",
-      "load_seconds": 27.8,
+      "load_seconds": 5.4,
       "error": null,
       "kind": "table",
       "heading": "SMS SUMMARY : INCOMING",
@@ -10137,7 +8925,7 @@
       "name": "Sms > SMS Reports > SMS Operators",
       "path": "/sms/default/operator",
       "final_url": "/sms/default/operator",
-      "load_seconds": 37.0,
+      "load_seconds": 21.9,
       "error": null,
       "kind": "table",
       "heading": "SUMMARY OF RECENT 15000 CUSTOMERS PHONE NUMBERS",
@@ -10172,70 +8960,11 @@
       "add_button": null
     },
     {
-      "id": "survey_default_solar",
-      "name": "Survey > Payg Survey",
-      "path": "/survey/default/solar?start_exit=1",
-      "final_url": "/survey/default/solar?start_exit=1",
-      "load_seconds": 4.4,
-      "error": null,
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
-      "id": "survey_default_survey",
-      "name": "Survey > Remainder Survey",
-      "path": "/survey/default/survey?start_exit=1&categories=17",
-      "final_url": "/survey/default/survey?start_exit=1&categories=17",
-      "load_seconds": 60.9,
-      "error": "504 Gateway Time-out",
-      "kind": "page",
-      "heading": "",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null,
-      "skip": true,
-      "notes": "Slow (>55s au 504 Gateway Time-out wakati wa discover 2026-10-09); ondoa skip kuijaribu"
-    },
-    {
-      "id": "survey_candidateworker_surveycandidate",
-      "name": "Survey > Worker Survey",
-      "path": "/survey/candidateworker/surveycandidate?start_exit=1",
-      "final_url": "/survey/candidateworker/surveycandidate?start_exit=1",
-      "load_seconds": 28.7,
-      "error": null,
-      "kind": "page",
-      "heading": "START SURVEY",
-      "columns": [],
-      "total": null,
-      "rows": 0,
-      "sort_keys": [],
-      "filters": [],
-      "has_pagination": false,
-      "view_href": null,
-      "vue_view": false,
-      "add_button": null
-    },
-    {
       "id": "menu_positions",
       "name": "Config > Manage Positions",
       "path": "/menu/positions",
       "final_url": "/menu/positions",
-      "load_seconds": 4.3,
+      "load_seconds": 3.4,
       "error": null,
       "kind": "table",
       "heading": "",
@@ -10250,7 +8979,7 @@
         "Actions"
       ],
       "total": null,
-      "rows": 267,
+      "rows": 226,
       "sort_keys": [],
       "filters": [],
       "has_pagination": false,
@@ -10263,7 +8992,7 @@
       "name": "Config > Users",
       "path": "/users/index2",
       "final_url": "/users/index2",
-      "load_seconds": 4.6,
+      "load_seconds": 2.1,
       "error": null,
       "kind": "vue",
       "heading": "Users",
@@ -10279,7 +9008,7 @@
         "ORGANIZATION",
         "ACTIONS"
       ],
-      "total": 99,
+      "total": 59,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -10313,7 +9042,7 @@
         }
       ],
       "has_pagination": false,
-      "view_href": "/users/view?id=212",
+      "view_href": "/users/view?id=214",
       "vue_view": true,
       "add_button": "Add",
       "create_path": "/users/create2",
@@ -10382,7 +9111,7 @@
       "name": "Config > Roles",
       "path": "/role/index",
       "final_url": "/role/index",
-      "load_seconds": 27.3,
+      "load_seconds": 6.5,
       "error": null,
       "kind": "table",
       "heading": "ROLES",
@@ -10394,7 +9123,7 @@
         "Modified Date"
       ],
       "total": null,
-      "rows": 9,
+      "rows": 0,
       "sort_keys": [],
       "filters": [],
       "has_pagination": false,
@@ -10459,7 +9188,7 @@
       "name": "Config > Permission",
       "path": "/permission/index2",
       "final_url": "/permission/index2",
-      "load_seconds": 3.9,
+      "load_seconds": 1.7,
       "error": null,
       "kind": "vue",
       "heading": "Permissions",
@@ -10469,7 +9198,7 @@
         "STATUS",
         "ACTIONS"
       ],
-      "total": 1066,
+      "total": 1123,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -10513,7 +9242,7 @@
       "name": "Config > Manage Menus",
       "path": "/menu/index",
       "final_url": "/menu/index",
-      "load_seconds": 2.9,
+      "load_seconds": 1.8,
       "error": null,
       "kind": "vue",
       "heading": "",
@@ -10612,7 +9341,7 @@
       "name": "Config > Permission Group",
       "path": "/permissiongroup/index2",
       "final_url": "/permissiongroup/index2",
-      "load_seconds": 3.0,
+      "load_seconds": 1.7,
       "error": null,
       "kind": "vue",
       "heading": "Permission Groups",
@@ -10622,7 +9351,7 @@
         "STATUS",
         "ACTIONS"
       ],
-      "total": 35,
+      "total": 36,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -10674,7 +9403,7 @@
       "name": "Config > Value List",
       "path": "/crud/valuelist/index2",
       "final_url": "/crud/valuelist/index2",
-      "load_seconds": 30.1,
+      "load_seconds": 6.3,
       "error": "An internal server error occurred",
       "kind": "page",
       "heading": "",
@@ -10693,7 +9422,7 @@
       "name": "Config > survey > Survey Data",
       "path": "/survey/surveydata/index",
       "final_url": "/survey/surveydata/index",
-      "load_seconds": 49.8,
+      "load_seconds": 11.3,
       "error": null,
       "kind": "grid",
       "heading": "SURVEY DATA",
@@ -10705,7 +9434,7 @@
         "Response",
         "Created Date"
       ],
-      "total": 3874331,
+      "total": 1600,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -10747,7 +9476,7 @@
         }
       ],
       "has_pagination": true,
-      "view_href": "/survey/surveydata/view?id=3874332",
+      "view_href": "/survey/surveydata/view?id=3512151",
       "vue_view": false,
       "add_button": "Create Survey Data",
       "create_path": "/survey/surveydata/create",
@@ -10800,7 +9529,7 @@
       "name": "Config > survey > Survey Question",
       "path": "/survey/surveyquestion/index",
       "final_url": "/survey/surveyquestion/index",
-      "load_seconds": 19.5,
+      "load_seconds": 5.1,
       "error": null,
       "kind": "table",
       "heading": "SURVEY QUESTIONS",
@@ -10914,7 +9643,7 @@
       "name": "Config > survey > Survey Category",
       "path": "/survey/surveycategory/index",
       "final_url": "/survey/surveycategory/index",
-      "load_seconds": 34.4,
+      "load_seconds": 5.0,
       "error": null,
       "kind": "table",
       "heading": "SURVEY CATEGORIES",
@@ -10973,7 +9702,7 @@
       "name": "Config > survey > Survey Valuelist",
       "path": "/survey/surveyvaluelist/index",
       "final_url": "/survey/surveyvaluelist/index",
-      "load_seconds": 27.2,
+      "load_seconds": 5.1,
       "error": null,
       "kind": "table",
       "heading": "SURVEY VALUE LISTS",
@@ -10990,7 +9719,7 @@
       "sort_keys": [],
       "filters": [],
       "has_pagination": true,
-      "view_href": "/survey/surveyvaluelist/view?id=9131",
+      "view_href": "/survey/surveyvaluelist/view?id=9132",
       "vue_view": false,
       "add_button": "Create Survey Value List",
       "create_path": "/survey/surveyvaluelist/create",
@@ -11027,7 +9756,7 @@
       "name": "Config > Administration > Notifications Config",
       "path": "/crud/notificationconfig/index",
       "final_url": "/crud/notificationconfig/index",
-      "load_seconds": 3.5,
+      "load_seconds": 1.7,
       "error": null,
       "kind": "vue",
       "heading": "Notification Configuration",
@@ -11237,7 +9966,7 @@
       "name": "Config > Administration > Notification Type",
       "path": "/crud/notificationtype/index",
       "final_url": "/crud/notificationtype/index",
-      "load_seconds": 1.5,
+      "load_seconds": 1.7,
       "error": null,
       "kind": "vue",
       "heading": "Notification Type",
@@ -11289,7 +10018,7 @@
       "name": "Config > Administration > Farmer group Order status",
       "path": "/crud/farmergrouporderstatus/index",
       "final_url": "/crud/farmergrouporderstatus/index",
-      "load_seconds": 2.1,
+      "load_seconds": 1.7,
       "error": null,
       "kind": "vue",
       "heading": "Farmer Group Order Status",
@@ -11341,7 +10070,7 @@
       "name": "Config > Administration > Purchase category",
       "path": "/crud/purchaserequestcategory/index",
       "final_url": "/crud/purchaserequestcategory/index",
-      "load_seconds": 2.2,
+      "load_seconds": 1.7,
       "error": null,
       "kind": "vue",
       "heading": "Purchase Request Category",
@@ -11402,86 +10131,26 @@
       "name": "Config > Administration > Department",
       "path": "/crud/department/index",
       "final_url": "/crud/department/index",
-      "load_seconds": 2.2,
+      "load_seconds": 1.7,
       "error": null,
-      "kind": "vue",
+      "kind": "page",
       "heading": "All Departments",
-      "columns": [
-        "ID",
-        "NAME",
-        "SHORT NAME",
-        "PARENT DEPARTMENT",
-        "HEAD OF DEPARTMENT",
-        "ACTIONS"
-      ],
-      "total": 15,
-      "rows": 15,
-      "sort_keys": [
-        "id",
-        "name",
-        "created_date"
-      ],
-      "filters": [
-        {
-          "label": "ID",
-          "name": "ID",
-          "tag": "input",
-          "type": "text"
-        },
-        {
-          "label": "Name",
-          "name": "Name",
-          "tag": "input",
-          "type": "text"
-        }
-      ],
+      "columns": [],
+      "total": null,
+      "rows": 0,
+      "sort_keys": [],
+      "filters": [],
       "has_pagination": false,
       "view_href": null,
-      "vue_view": true,
-      "add_button": "Add",
-      "create_path": "/crud/department/create",
-      "create_error": null,
-      "form_fields": [
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "",
-          "name": "",
-          "placeholder": "Name",
-          "required": false
-        },
-        {
-          "tag": "input",
-          "type": "text",
-          "id": "",
-          "name": "",
-          "placeholder": "Short Name",
-          "required": false
-        },
-        {
-          "tag": "select",
-          "type": "select-one",
-          "id": "parent",
-          "name": "",
-          "placeholder": "",
-          "required": false
-        },
-        {
-          "tag": "select",
-          "type": "select-one",
-          "id": "hod",
-          "name": "",
-          "placeholder": "",
-          "required": false
-        }
-      ]
+      "vue_view": false,
+      "add_button": null
     },
     {
       "id": "crud_organizationpositions_index",
       "name": "Config > Administration > Organization Position",
       "path": "/crud/organizationpositions/index",
       "final_url": "/crud/organizationpositions/index",
-      "load_seconds": 2.1,
+      "load_seconds": 1.7,
       "error": null,
       "kind": "vue",
       "heading": "Organization Positions",
@@ -11494,7 +10163,7 @@
         "DEPARTMENT",
         "ACTIONS"
       ],
-      "total": 48,
+      "total": 45,
       "rows": 20,
       "sort_keys": [
         "id",
@@ -11583,7 +10252,7 @@
       "name": "Config > Administration > Vendors > All Vendor",
       "path": "/crud/vendors/index",
       "final_url": "/crud/vendors/index",
-      "load_seconds": 1.9,
+      "load_seconds": 1.4,
       "error": null,
       "kind": "vue",
       "heading": "All Vendors",
@@ -11662,7 +10331,7 @@
       "name": "Config > Administration > Vendors > Vendor request Category",
       "path": "/crud/vendorsrequestcategory/index",
       "final_url": "/crud/vendorsrequestcategory/index",
-      "load_seconds": 2.0,
+      "load_seconds": 1.4,
       "error": null,
       "kind": "vue",
       "heading": "Vendors - Request Categories",
@@ -11724,7 +10393,7 @@
       "name": "Apps > Device Info",
       "path": "/crud/deviceinfo/index",
       "final_url": "/crud/deviceinfo/index",
-      "load_seconds": 19.3,
+      "load_seconds": 5.1,
       "error": null,
       "kind": "table",
       "heading": "DEVICE INFOS",
@@ -11812,7 +10481,7 @@
       "name": "Apps > API Hit Log",
       "path": "/crud/apihitlog/index",
       "final_url": "/crud/apihitlog/index",
-      "load_seconds": 23.9,
+      "load_seconds": 4.6,
       "error": null,
       "kind": "grid",
       "heading": "API HIT LOGS",
@@ -11930,7 +10599,7 @@
       "name": "Apps > Sync Log",
       "path": "/crud/synclog/index",
       "final_url": "/crud/synclog/index",
-      "load_seconds": 50.4,
+      "load_seconds": 8.2,
       "error": null,
       "kind": "table",
       "heading": "SYNC LOGS",
@@ -12000,7 +10669,7 @@
       "name": "Apps > Complete Sync",
       "path": "/crud/completesync/index",
       "final_url": "/crud/completesync/index",
-      "load_seconds": 53.3,
+      "load_seconds": 8.9,
       "error": null,
       "kind": "table",
       "heading": "COMPLETE SYNCS",
@@ -12043,10 +10712,10 @@
     },
     {
       "id": "customerservice_index",
-      "name": "Customer Service > Service Page",
+      "name": "Customer service > Service Page",
       "path": "/customerservice/index",
       "final_url": "/customerservice/index",
-      "load_seconds": 2.2,
+      "load_seconds": 1.6,
       "error": null,
       "kind": "page",
       "heading": "",
@@ -12062,10 +10731,10 @@
     },
     {
       "id": "customerservice_shopsinfo",
-      "name": "Customer Service > Shops Info",
+      "name": "Customer service > Shops Info",
       "path": "/customerservice/shopsinfo",
       "final_url": "/customerservice/shopsinfo",
-      "load_seconds": 4.4,
+      "load_seconds": 2.5,
       "error": null,
       "kind": "vue",
       "heading": "Shops Info",
@@ -12078,8 +10747,8 @@
         "QUANTITY",
         "PHONES"
       ],
-      "total": 7229,
-      "rows": 17,
+      "total": 1306,
+      "rows": 20,
       "sort_keys": [],
       "filters": [
         {
@@ -12117,7 +10786,7 @@
       "name": "Reports",
       "path": "/reports",
       "final_url": "/reports",
-      "load_seconds": 2.0,
+      "load_seconds": 1.8,
       "error": null,
       "kind": "page",
       "heading": "Sales Reports",
@@ -12136,7 +10805,7 @@
       "name": "Assets > All Assets",
       "path": "/crud/asset/index",
       "final_url": "/crud/asset/index",
-      "load_seconds": 2.6,
+      "load_seconds": 1.8,
       "error": null,
       "kind": "vue",
       "heading": "Assets",
@@ -12153,8 +10822,8 @@
         "ORGANIZATION",
         "ACTIONS"
       ],
-      "total": 24,
-      "rows": 20,
+      "total": 19,
+      "rows": 19,
       "sort_keys": [
         "id",
         "asset_name",
@@ -12304,7 +10973,7 @@
       "name": "Assets > Asset Names",
       "path": "/crud/assetnames/index",
       "final_url": "/crud/assetnames/index",
-      "load_seconds": 2.1,
+      "load_seconds": 1.9,
       "error": null,
       "kind": "vue",
       "heading": "Asset Names",
@@ -12361,10 +11030,10 @@
     },
     {
       "id": "crud_purchaserequest_index",
-      "name": "Purchase Request",
+      "name": "Purchase request",
       "path": "/crud/purchaserequest/index",
       "final_url": "/crud/purchaserequest/index",
-      "load_seconds": 2.1,
+      "load_seconds": 1.8,
       "error": null,
       "kind": "vue",
       "heading": "Purchase Request",

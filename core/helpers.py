@@ -305,6 +305,19 @@ def validation_shown(driver):
     return any(shown_text(e) for e in driver.find_elements(By.CSS_SELECTOR, VALIDATION_SELECTORS))
 
 
+def visible_validation_messages(driver):
+    """Maandishi ya validation yanayoonekana kwenye fomu, k.m. ["First Name cannot be blank."]"""
+    out = []
+    for e in driver.find_elements(By.CSS_SELECTOR, VALIDATION_SELECTORS):
+        try:
+            text = e.text.strip() if _safe_displayed(e) else ""
+        except Exception:
+            text = ""
+        if text and text not in out:
+            out.append(text)
+    return out
+
+
 def wait_until(driver, condition, timeout=TIMEOUT):
     # Element "stale" (ukurasa umebadilika katikati ya kusoma) = jaribu tena, si error
     try:

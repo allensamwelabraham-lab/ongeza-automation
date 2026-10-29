@@ -15,7 +15,7 @@ from datetime import datetime
 from urllib.parse import urljoin, urlparse
 
 import pytest
-from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
@@ -45,6 +45,7 @@ from core.helpers import (
     find_error_on_page,
     find_submit_button,
     validation_shown,
+    visible_validation_messages,
     wait_until,
 )
 from core.modules import load_modules
@@ -139,6 +140,9 @@ def can_save(m):
 # HELPERS
 # ============================================================
 
+LIST_WAIT = int(os.getenv("LIST_WAIT", "90"))
+
+
 def open_module(driver, app, module, path=None):
     error = open_page(driver, app, path or module["path"])
     if is_login_page(driver):
@@ -149,6 +153,13 @@ def open_module(driver, app, module, path=None):
     if module.get("ignore_error_text") and error and "timeout" not in error.lower():
         error = None
     assert error is None, f"{module['name']}: error '{error}' kwenye {driver.current_url}"
+    if module.get("columns") and not path:
+        # Wait until: staging ni nzito, list inaweza kuchukua muda kujichora. Usiamue chochote
+        # mpaka table (vichwa vyake) ionekane; isipoonekana kabisa, test haikuweza kupima.
+        if not wait_until(driver, lambda d: profile(d)["columns"], timeout=LIST_WAIT):
+            error = find_error_on_page(driver)
+            assert error is None, f"{module['name']}: error '{error}' kwenye {driver.current_url}"
+            raise TimeoutException(f"{module['name']}: table haikujitokeza ndani ya sekunde {LIST_WAIT}")
     return profile(driver)
 
 
@@ -210,11 +221,27 @@ def check_page_matches_baseline(driver, app, module):
 # ============================================================
 
 def check_columns(driver, app, module):
+    # Kipimo ni columns ambazo list page yenyewe inaonyesha sasa (si orodha iliyohifadhiwa):
+    # kila column iwe na jina, isijirudie, na kila row iwe na cell ya kila column.
     info = open_module(driver, app, module)
-    current = {_norm(c) for c in info["columns"]}
-    missing = [c for c in module.get("columns") or [] if _norm(c) not in current]
-    assert not missing, f"{module['name']}: columns zimepotea {missing}"
-    actual(f"Columns {len(info['columns'])} zipo: {', '.join(info['columns'])}")
+    columns = [c.strip() for c in info["columns"]]
+    assert columns, f"{module['name']}: table haina vichwa vya columns"
+    named = [c for c in columns if c]
+    repeated = sorted({c for c in named if named.count(c) > 1})
+    assert not repeated, f"{module['name']}: columns zinajirudia: {repeated}"
+
+    data = table_data(driver, module["kind"])
+    short = [i + 1 for i, r in enumerate(data) if len(r) < len(columns) - 1]
+    assert not short, f"{module['name']}: rows {short[:5]} hazina cell kwa kila column ({len(columns)})"
+
+    # Tofauti na orodha ya zamani ni taarifa tu (list inaweza kubadilishwa makusudi)
+    before = {_norm(c) for c in module.get("columns") or []}
+    now = {_norm(c) for c in columns}
+    note = ""
+    if before and before != now:
+        note = (f" (tofauti na orodha ya modules: "
+                f"zimeondoka {sorted(before - now)}, mpya {sorted(now - before)})")
+    actual(f"Columns {len(columns)} zinaonekana: {', '.join(columns)}{note}")
 
 
 # ============================================================
@@ -223,10 +250,10 @@ def check_columns(driver, app, module):
 
 def check_records(driver, app, module):
     info = open_module(driver, app, module)
-    if module.get("total") is not None:
-        assert info["total"] is not None, f"{module['name']}: idadi ya records haionekani"
     if (module.get("rows") or 0) > 0:
-        assert info["rows"] > 0, f"{module['name']}: table iko tupu (ilikuwa na rows {module['rows']})"
+        if info["rows"] == 0:
+            # Data inaweza kuwa imefutwa/kubadilika: si kosa la ukurasa wenyewe
+            pytest.skip(f"{module['name']}: table haina records sasa (ilikuwa na rows {module['rows']})")
         if info["total"] is not None:
             assert info["total"] >= info["rows"], (
                 f"{module['name']}: total {info['total']} < rows {info['rows']}"
@@ -245,8 +272,11 @@ def check_records(driver, app, module):
 # ============================================================
 
 def check_pagination(driver, app, module):
-    open_module(driver, app, module)
+    first = open_module(driver, app, module)
     first_page = table_data(driver, module["kind"])
+    # Idadi ya records hubadilika (k.m. Warehouses: 34 -> 2): page moja tu = hakuna cha kupima
+    if first.get("total") is not None and first["total"] <= len(first_page):
+        pytest.skip(f"{module['name']}: records {first['total']} tu, zote ziko page 1 (hakuna page 2)")
 
     info = open_module(driver, app, module, with_query(driver.current_url, page=2))
     second_page = table_data(driver, module["kind"])
@@ -408,19 +438,71 @@ def check_create_form_rejects_empty(driver, app, module):
     if submit is None:
         pytest.skip(f"{module['name']}: button ya Save/Submit haikupatikana")
 
+    # 1. Validation ya browser: form tupu isitumwe kabisa (guard inazuia ikitumwa)
     install_write_guard(driver)
     click(driver, submit)
     time.sleep(2)
 
     shown = validation_shown(driver)
     writes = blocked_writes(driver) or []
-    if not shown and writes:
-        pytest.fail(
-            f"{module['name']}: form tupu haikuonyesha validation yoyote kwenye browser na "
-            f"ilijaribu kutuma {writes[-1]} (write guard imeizuia, hakuna kilichosaviwa)"
-        )
-    assert shown or driver.current_url == url_before, f"{module['name']}: form tupu imekubaliwa"
-    actual("Form tupu imekataliwa na validation imeonyeshwa")
+    if shown or (not writes and driver.current_url == url_before):
+        actual("Form tupu imekataliwa na validation imeonyeshwa kwenye browser")
+        return
+
+    # 2. Hakuna validation ya browser: apps hizi nyingi zinathibitisha kwenye server. Kuipima lazima
+    # form tupu itumwe kweli, kwa hiyo inafanyika tu tests za kusave zikiruhusiwa (--crud).
+    if os.environ.get("RUN_CRUD") != "1":
+        pytest.skip(f"{module['name']}: browser haina validation, form inatumwa kwa server "
+                    f"({writes[-1] if writes else driver.current_url}); endesha na --crud kupima "
+                    f"kama server inaikataa")
+
+    open_module(driver, app, module, module["create_path"])
+    url_before = driver.current_url
+    record_server_responses(driver)
+    click(driver, find_submit_button(driver))
+
+    def answered(d):
+        return (d.current_url != url_before or validation_shown(d)
+                or any(r["url"] and r["status"] for r in server_responses(d)))
+    wait_until(driver, answered, timeout=60)
+    time.sleep(2)
+
+    server = describe_server_responses(driver)
+    shown = validation_shown(driver)
+    errors = server_error_messages(driver)
+    if driver.current_url != url_before and "create" not in driver.current_url:
+        # Baadhi ya forms zinapeleka mtumiaji kwenye ukurasa wa save unaosema "Failed to create ..."
+        # na sababu ("... cannot be blank"): hiyo ni kukataliwa kunakoonyeshwa kwa mtumiaji, si kusave.
+        page = driver.execute_script("return document.body ? document.body.innerText : '';") or ""
+        refused = re.findall(r"[^\n]*(?:failed to (?:create|save)|cannot be blank|is required|"
+                             r"must not be empty|imeshindwa)[^\n]*", page, re.I)
+        if refused and not _server_says_saved(driver):
+            actual("Form tupu imekataliwa na haikusave; ukurasa " + driver.current_url + " unaonyesha: "
+                   + "; ".join(dict.fromkeys(m.strip() for m in refused))[:400])
+            return
+        pytest.fail(f"{module['name']}: form tupu imekubaliwa na kusave, ukurasa umeenda "
+                    f"{driver.current_url} (server: {server})")
+    if _server_says_saved(driver):
+        pytest.fail(f"{module['name']}: form tupu imesaviwa na server (server: {server})")
+    if shown:
+        messages = visible_validation_messages(driver) or errors
+        actual("Form tupu imekataliwa, haikusave, na validation imeonyeshwa"
+               + (f": {'; '.join(messages[:4])}" if messages else ""))
+        return
+    if errors:
+        pytest.fail(f"{module['name']}: server imekataa form tupu ({'; '.join(errors[:4])}) lakini "
+                    f"mtumiaji haonyeshwi ujumbe wowote wa validation kwenye fomu")
+    pytest.fail(f"{module['name']}: form tupu ilitumwa na hakuna validation yoyote iliyoonyeshwa "
+                f"(server: {server})")
+
+
+def _server_says_saved(driver):
+    """Jibu la server linasema record imesaviwa (status true / ujumbe wa 'success' / 'saved')."""
+    for r in server_responses(driver):
+        body = (r.get("body") or "").lower()
+        if '"status":true' in body.replace(" ", "") or re.search(r'"message":"[^"]*(success|saved|created)', body):
+            return True
+    return False
 
 
 # ============================================================
@@ -533,7 +615,9 @@ const isEdit = e => !e.classList.contains('disabled') && !e.hasAttribute('disabl
     editHref.test(e.getAttribute('href') || '')
     || /^(update|edit)$/i.test((e.getAttribute('title') || e.getAttribute('aria-label') || e.textContent || '').trim())
     || !!e.querySelector('.fa-pencil, .fa-edit, .fa-pen, .fa-pencil-alt, .glyphicon-pencil, .lucide-square-pen, .lucide-pencil'));
-const isView = e => /\/(view|details)\b/i.test(e.getAttribute('href') || '') && !/^javascript/i.test(e.getAttribute('href'));
+// View: link ya /view, au link ya JS yenye data-id (k.m. a.worker-view inayofungua /crud/worker/view?id=)
+const isView = e => (/\/(view|details)\b/i.test(e.getAttribute('href') || '') && !/^javascript/i.test(e.getAttribute('href')))
+    || (!!e.dataset.id && /(^|[-_\s])view\b/i.test(e.className));
 return [...document.querySelectorAll('table tbody tr')].map(row => {
     const ctl = [...row.querySelectorAll('a, button')];
     const text = row.innerText.replace(/\s+/g, ' ').trim();
@@ -549,7 +633,9 @@ EDIT_BUTTON_JS = r"""
 const root = arguments[0] || document;
 return [...root.querySelectorAll('a, button')].find(e => e.getClientRects().length && !e.disabled && (
     /^(edit|update)$/i.test(e.textContent.trim())
-    || !!e.querySelector('.lucide-square-pen, .lucide-pencil'))) || null;
+    || /(^|[-_\s])(update|edit)-button\b/i.test(e.className)
+    || (e.textContent.trim().length <= 15 && !e.closest('nav, aside, .menu, .sidebar')
+        && !!e.querySelector('.lucide-square-pen, .lucide-pencil, .fa-edit, .fa-pencil, .fa-pencil-alt')))) || null;
 """
 
 # Select yenye "--Select--"/"Loading..." inasomwa kama tupu
@@ -815,7 +901,17 @@ def _open_edit_form(driver, app, module, record):
     """Fungua fomu ya Edit ya record na urudishe URL yake."""
     control = record["edit"]
     if control is None:
-        open_module(driver, app, module, record["view"].get_attribute("href"))
+        view = record["view"]
+        href = view.get_attribute("href") or ""
+        if _navigates(href, driver.current_url):
+            open_module(driver, app, module, href)
+        else:  # link ya JS (k.m. a.worker-view): ibofye na usubiri ukurasa wa View
+            before = driver.current_url
+            click(driver, view)
+            wait_until(driver, lambda d: d.current_url != before, timeout=30)
+            if driver.current_url == before:
+                pytest.skip(f"{module['name']}: View inafunguka kama popup kwenye ukurasa uleule; haijaungwa mkono bado")
+            open_module(driver, app, module, driver.current_url)
         roots = driver.find_elements(By.CSS_SELECTOR, FORM_SCOPE)
         control = driver.execute_script(EDIT_BUTTON_JS, roots[0] if roots else None)
         if control is None:

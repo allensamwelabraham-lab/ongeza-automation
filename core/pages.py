@@ -284,14 +284,18 @@ def _vue_dropdown_pick_once(driver, toolbar_label, item_css, item_text=None, att
         )
         click(driver, button)
         time.sleep(0.5)
-    for item in driver.find_elements(By.CSS_SELECTOR, item_css):
-        if not item.is_displayed():  # stale hapa inapanda juu ili _vue_dropdown_pick ijaribu tena
-            continue
-        if attr and item.get_attribute(attr) == str(value):
-            click(driver, item)
-            return True
-        if item_text and item.text.strip().upper() == item_text.upper():
-            click(driver, item)
+    items = driver.find_elements(By.CSS_SELECTOR, item_css)
+    if not any(_safe_displayed(i) for i in items):
+        return False  # menu haijafunguka
+    for item in items:
+        # Menu ikiwa ndefu kuliko table (k.m. rows 2), items za chini (DESC) zinafichwa na mpaka wa
+        # table: Selenium inaziona "hazionekani" ingawa zipo. Zisome kwa textContent na uzibofye kwa JS.
+        text = (item.get_attribute("textContent") or "").strip().upper()
+        if (attr and item.get_attribute(attr) == str(value)) or (item_text and text == item_text.upper()):
+            if item.is_displayed():
+                click(driver, item)
+            else:
+                driver.execute_script("arguments[0].click();", item)
             return True
     return False
 

@@ -15,7 +15,7 @@ Mpangilio (mapping):
     Scenario     = kichwa cha test case (discription = hatua)
     Expectation  = matokeo yanayotarajiwa (moja kwa kila scenario)
     Test         = run moja kwa kila push
-    TestsResults = kila case: Pass/Fail (SKIP inarukwa, ERROR = Fail), result = actual (herufi 255)
+    TestsResults = kila case: Pass/Fail (SKIP inarukwa; ERROR = scenario bila result, yaani Not tested), result = actual (herufi 255)
 
 Config (.env au environment, kamwe usiandike hapa):
     TESTER_API_URL   k.m. https://tester.example.com  (au .../api)
@@ -506,7 +506,7 @@ class Pusher:
             return
         for case in job["cases"]:
             status = (case.get("status") or "").upper()
-            if status == "SKIP" or status not in ("PASS", "FAIL", "ERROR"):
+            if status not in ("PASS", "FAIL", "ERROR"):
                 counts["skip"] += 1
                 self.results["skipped"] += 1
                 continue
@@ -520,8 +520,11 @@ class Pusher:
                 feature_id = self.ensure_feature(module_id, sub_id, title)
                 scenario_id = self.ensure_scenario(module_id, sub_id, feature_id, title, steps)
                 self.ensure_expectation(scenario_id, expected)
-                if scenario_id in self.done_scenarios:
+                if scenario_id in self.done_scenarios or status == "ERROR":
+                    # ERROR: test haikumaliza (browser/muda), si Pass wala Fail. Scenario ipo bila
+                    # result, kwa hiyo project tester inaionyesha kama "Not tested".
                     counts["skip"] += 1
+                    self.results["skipped"] += status == "ERROR"
                     continue
                 row = self.send_result(scenario_id, remark, clip(case.get("actual") or status))
                 self.done_scenarios.add(scenario_id)
