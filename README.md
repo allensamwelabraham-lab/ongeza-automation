@@ -231,3 +231,4 @@ pagination na Export ya ukurasa wa module inabofywa moja moja (`core/controls.py
 kusave, na buttons hatari (Delete, Sync, Push, Pay, Approve, Send, Populate, Process ...) hazibofywi.
 Export lazima ipakue file. Kila module ina muda wa juu wa dakika 6 (`BUTTONS_MODULE_SECONDS`).
 Matokeo na makosa yaliyopatikana: `reports/makosa_ya_buttons.md`.
+# ongeza-automation
