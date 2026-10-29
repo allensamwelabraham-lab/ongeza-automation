@@ -343,7 +343,8 @@ class Pusher:
         self.modules, self.subs, self.features, self.scenarios = {}, {}, {}, {}
         self.with_expectation = set()
         self.test_id = None
-        self.test_rows = {}          # scenario_id -> row ya result iliyopo kwenye test hii
+        self.test_rows = {}          # scenario_id -> [rows za results zilizopo kwenye test hii]
+        self.delete_error = None     # sababu ya DELETE ya kwanza iliyoshindwa (inaonyeshwa mara moja)
         self.done_scenarios = set()
 
     # ---------- helpers ----------
@@ -451,29 +452,55 @@ class Pusher:
         self.test_id = row["id"]
         if not self.dry:
             # Backend inanakili Pass za test iliyopita kwenye test mpya (carried rows)
-            for r in self.c.list_all("/tests-results/list", eq(test_id=self.test_id)):
-                self.test_rows[r.get("scenario_id")] = r
+            for r in self._rows_of_test():
+                self.test_rows.setdefault(str(r.get("scenario_id")), []).append(r)
             print(f"Test mpya id {self.test_id} (round {row.get('test_round') or '-'}), "
                   f"results zilizonakiliwa kutoka test iliyopita: {len(self.test_rows)}")
         else:
             print(f"Test mpya itaundwa ({now})")
 
+    def _rows_of_test(self, **filters):
+        """Results za test hii tu (backend ikipuuza filter, rows za tests nyingine zisiguswe)."""
+        rows = self.c.list_all("/tests-results/list", eq(test_id=self.test_id, **filters))
+        return [r for r in rows if str(r.get("test_id")) == str(self.test_id)
+                and (not filters or str(r.get("scenario_id")) == str(filters["scenario_id"]))]
+
     def send_result(self, scenario_id, remark, result):
         payload = {"test_id": self.test_id, "scenario_id": scenario_id, "remark": remark, "result": result}
         if self.dry:
             return {"id": self.new_id()}
-        old = self.test_rows.pop(scenario_id, None)
-        if old:
-            # Row iliyonakiliwa (carried) — ifute na uandike matokeo mapya ya run hii.
-            # (Edit ingeacha carried_from_test_id, na test isiyo na results zake ingefutwa na push ijayo.)
+        olds = self.test_rows.pop(str(scenario_id), None)
+        if not olds:
             try:
-                self.c.data("DELETE", f"/tests-results/{old['uuid']}/delete")
-            except ApiError:
-                row = self.c.data("PUT", f"/tests-results/{old['uuid']}/edit", data=payload)
-                self.results["replaced"] += 1
-                return row
-            self.results["replaced"] += 1
-        return self.c.data("POST", "/tests-results/create", data=payload)
+                return self.c.data("POST", "/tests-results/create", data=payload)
+            except ApiError as e:
+                if e.status != 422:
+                    raise
+                # Scenario tayari ina result kwenye test hii (k.m. iliyonakiliwa) ambayo haikuonekana mwanzo
+                olds = self._rows_of_test(scenario_id=scenario_id)
+                if not olds:
+                    raise
+        # Row iliyonakiliwa (carried): ifute na uandike matokeo mapya ya run hii.
+        # (Edit ingeacha carried_from_test_id, na test isiyo na results zake ingefutwa na push ijayo.)
+        # Rows zikiwa zaidi ya moja kwa scenario moja, zile za ziada zinafutwa.
+        keep, extra = olds[0], olds[1:]
+        for r in extra:
+            self._delete(r)
+        self.results["replaced"] += 1
+        if not extra and self._delete(keep):
+            return self.c.data("POST", "/tests-results/create", data=payload)
+        return self.c.data("PUT", f"/tests-results/{keep['uuid']}/edit", data=payload)
+
+    def _delete(self, row):
+        try:
+            self.c.data("DELETE", f"/tests-results/{row['uuid']}/delete")
+            return True
+        except ApiError as e:
+            if self.delete_error is None:
+                self.delete_error = e.short()
+                print(f"  ! Kufuta result iliyonakiliwa kumekataliwa ({self.delete_error}); "
+                      f"itabadilishwa (Edit) badala yake")
+            return False
 
     def send_image(self, result_id, path):
         if not self.images or self.image_error:
