@@ -2,7 +2,7 @@
 
 | Module | Path | Aina | Records | Columns | Sort | Filters | Create | Sek | Error |
 |---|---|---|---|---|---|---|---|---|---|
-| Worker > Tractor agents | `/crud/tractor-agent/tractoragents` | vue | 0 | 10 | 4 | 14 | /crud/tractor-agent/create-tractor-agent | 3.3 |  |
+| Worker > Tractor agents | `/crud/tractor-agent/tractoragents` | vue | 0 | 10 | 4 | 14 | /crud/tractor-agent/create-tractor-agent | 3.2 |  |
 | Worker > Agents | `/crud/worker/agents?workeid=` | vue | 646 | 12 | 4 | 14 | /crud/worker/create-agent | 3.8 |  |
 | Worker > Employees | `/crud/worker/employees?workeid=` | vue | 83 | 12 | 4 | 14 | /crud/worker/create-employee | 2.7 |  |
 | Worker > Warehouses | `/crud/worker/warehouses?workeid=` | vue | 2 | 13 | 4 | 14 | /crud/worker/create-warehouse | 3.0 |  |
@@ -177,3 +177,4 @@
 | Assets > All Assets | `/crud/asset/index` | vue | 20 | 11 | 3 | 8 | /crud/asset/create | 2.1 |  |
 | Assets > Asset Names | `/crud/assetnames/index` | vue | 14 | 3 | 3 | 2 | /crud/assetnames/create | 1.6 |  |
 | Purchase Request | `/crud/purchaserequest/index` | vue | 0 | 9 | 3 | 5 | /crud/purchaserequest/create | 1.8 |  |
+| Worker > Extended Store Requests | `/crud/extendedstorerequest/index` | table |  | 5 | 0 | 0 |  | 1.4 |  |
