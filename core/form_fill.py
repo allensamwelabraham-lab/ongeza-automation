@@ -123,6 +123,33 @@ def _text_value(key, label, field_type, stamp, maxlength):
     return value
 
 
+OPEN_SELECT2_OPTIONS_JS = """
+const junk = new RegExp(arguments[0], 'i'), need = arguments[1], out = [];
+for (const li of document.querySelectorAll('.select2-container--open li.select2-results__option')) {
+    const text = (li.textContent || '').trim();
+    if (text && !junk.test(text) && li.getAttribute('aria-disabled') !== 'true'
+            && !li.querySelector('ul')) {   // kichwa cha kundi (optgroup) si option
+        out.push(li);
+        if (out.length >= need) break;
+    }
+}
+return out;
+"""
+
+
+SELECT_OPTIONS_JS = """
+const junk = new RegExp(arguments[1], 'i'), need = arguments[2], out = [];
+for (const o of arguments[0].options) {
+    const text = (o.text || '').trim();
+    if (o.value && text && !junk.test(text)) {
+        out.push([o.value, text]);
+        if (out.length >= need) break;
+    }
+}
+return out;
+"""
+
+
 def _select2_pick(driver, key, index):
     """Fungua select2 ya #key na ubofye option halisi ya namba `index` (ndani ya dropdown iliyo wazi tu)."""
     opener = driver.find_element(By.CSS_SELECTOR, f"#{key} + span.select2 .select2-selection")
@@ -130,12 +157,9 @@ def _select2_pick(driver, key, index):
     opener.click()
 
     def options():
-        found = []
-        for li in driver.find_elements(By.CSS_SELECTOR, ".select2-container--open li.select2-results__option"):
-            text = li.text.strip()
-            if text and not JUNK_OPTION.match(text) and li.get_attribute("aria-disabled") != "true":
-                found.append(li)
-        return found
+        # Kwa JS mara moja tu: select2 kama Ward ina maelfu ya options, na kusoma kila moja kwa
+        # Selenium (li.text) kulichukua dakika nyingi
+        return driver.execute_script(OPEN_SELECT2_OPTIONS_JS, JUNK_OPTION.pattern, index + 1) or []
 
     deadline, typed = time.time() + 8, False
     found = options()
@@ -149,9 +173,16 @@ def _select2_pick(driver, key, index):
     if len(found) <= index:
         driver.find_element(By.TAG_NAME, "body").send_keys(Keys.ESCAPE)
         return None
-    text = found[index].text.strip()
-    found[index].click()
-    time.sleep(1)
+    text = (found[index].get_attribute("textContent") or "").strip()
+    try:
+        found[index].click()
+    except Exception:
+        driver.execute_script("arguments[0].scrollIntoView({block: 'nearest'});", found[index])
+        found[index].click()
+    # Subiri dropdown ifunge (si sekunde 1 kamili kila mara)
+    end = time.time() + 2
+    while time.time() < end and driver.find_elements(By.CSS_SELECTOR, ".select2-container--open .select2-results"):
+        time.sleep(0.2)
     return text
 
 
@@ -165,9 +196,8 @@ def _choose_select(driver, element, index=0):
             pass
 
     def real_options():
-        return [o for o in Select(element).options
-                if (o.get_attribute("value") or "") and o.text.strip()
-                and not JUNK_OPTION.match(o.text.strip())]
+        # [value, text] kwa JS mara moja (si option moja moja kwa Selenium: selects kubwa zilichelewa)
+        return driver.execute_script(SELECT_OPTIONS_JS, element, JUNK_OPTION.pattern, index + 1) or []
 
     deadline = time.time() + 8
     options = real_options()
@@ -177,17 +207,17 @@ def _choose_select(driver, element, index=0):
     if len(options) <= index:
         return None
 
-    chosen = options[index]
+    value, text = options[index]
     if element.is_displayed():
-        Select(element).select_by_value(chosen.get_attribute("value"))
+        Select(element).select_by_value(value)
     else:
         driver.execute_script(
             "arguments[0].value = arguments[1];"
             "arguments[0].dispatchEvent(new Event('change', {bubbles: true}));"
             "if (window.jQuery) jQuery(arguments[0]).trigger('change');",
-            element, chosen.get_attribute("value"),
+            element, value,
         )
-    return chosen.text.strip()
+    return text
 
 
 VISIBLE_JS = """
@@ -263,8 +293,10 @@ def _fill_pass(driver, stamp, scope_css, gave_up=None, first=False):
                     filled.append((label, "(file imerukwa)"))
                 continue
             if tag == "select":
-                current = Select(element).first_selected_option if element.get_attribute("value") else None
-                if current is not None and current.text.strip() and not JUNK_OPTION.match(current.text.strip()):
+                current = driver.execute_script(
+                    "const e = arguments[0], o = e.selectedIndex >= 0 ? e.options[e.selectedIndex] : null;"
+                    "return e.value && o ? o.text.trim() : '';", element)
+                if current and not JUNK_OPTION.match(current):
                     continue  # tayari imechaguliwa (default au pass iliyopita)
                 if (key or element.id) in gave_up:
                     continue
