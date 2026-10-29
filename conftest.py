@@ -91,7 +91,40 @@ def pytest_runtest_makereport(item, call):
     name = "".join(c if c.isalnum() or c in "-_" else "_" for c in item.nodeid)
     path = folder / f"{name}.png"
     try:
+        _wait_page_settled(browser)
         browser.save_screenshot(str(path))
         report.sections.append(("screenshot", str(path)))
     except Exception:
         pass
+
+
+# Ukurasa ukiwa bado unapakia (progress bar, spinner, ukurasa umefifia), picha ingeonyesha
+# ukurasa usiokamilika. Subiri (hadi SCREENSHOT_WAIT sekunde) utulie kabla ya kupiga picha.
+SETTLED_JS = r"""
+if (document.readyState !== 'complete') return false;
+if (window.jQuery && jQuery.active > 0) return false;
+const shown = e => { const s = getComputedStyle(e);
+    return e.getClientRects().length && s.display !== 'none' && s.visibility !== 'hidden' && +s.opacity > 0.05; };
+if ([...document.querySelectorAll('.pace-running, .pace-active, .nprogress-busy, #nprogress, ' +
+        '.fa-spin, .spinner, .spinner-border, .loading, .loader, .preloader, .blockUI, .swal2-loading')]
+        .some(shown)) return false;
+for (const e of [document.documentElement, document.body, document.querySelector('main, #content, .content')])
+    if (e && +getComputedStyle(e).opacity < 0.95) return false;
+return true;
+"""
+
+
+def _wait_page_settled(driver):
+    import os
+    import time
+    end = time.time() + float(os.getenv("SCREENSHOT_WAIT", "20"))
+    calm = 0
+    while time.time() < end:
+        try:
+            calm = calm + 1 if driver.execute_script(SETTLED_JS) else 0
+        except Exception:
+            calm = 0
+        if calm >= 2:  # imetulia kwa ukaguzi 2 mfululizo
+            return
+        time.sleep(0.5)
+
