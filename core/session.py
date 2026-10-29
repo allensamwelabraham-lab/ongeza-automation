@@ -146,7 +146,13 @@ def restore_session(driver, app):
     driver.get(app["base_url"])
     time.sleep(1)
 
-    for cookie in json.loads(cookies_file.read_text()):
+    cookies = json.loads(cookies_file.read_text())
+    # Cookie ya session ya zamani (PHPSESSID, bila expiry) ikirudishwa, server ya Yii inapoteza flash
+    # (validation errors hazirudi baada ya Save). Ikiwa kuna cookie ya kudumu ya login (_identity),
+    # tunarudisha hiyo tu na server inatoa session mpya.
+    if any(c.get("expiry") for c in cookies):
+        cookies = [c for c in cookies if c.get("expiry")]
+    for cookie in cookies:
         cookie.pop("sameSite", None)
         try:
             driver.add_cookie(cookie)

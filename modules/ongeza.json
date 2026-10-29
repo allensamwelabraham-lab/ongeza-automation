@@ -1,14 +1,14 @@
 {
   "app": "ONGEZA",
   "base_url": "https://staging.ongeza.net",
-  "discovered_at": "2026-10-27T08:34:44",
+  "discovered_at": "2026-10-29T09:52:05",
   "modules": [
     {
       "id": "crud_tractor_agent_tractoragents",
       "name": "Worker > Tractor agents",
       "path": "/crud/tractor-agent/tractoragents",
       "final_url": "/crud/tractor-agent/tractoragents",
-      "load_seconds": 3.3,
+      "load_seconds": 3.2,
       "error": null,
       "kind": "vue",
       "heading": "Tractor Agents",
@@ -11580,6 +11580,31 @@
           "required": false
         }
       ]
+    },
+    {
+      "id": "crud_extendedstorerequest_index",
+      "name": "Worker > Extended Store Requests",
+      "path": "/crud/extendedstorerequest/index",
+      "final_url": "/crud/extendedstorerequest/index",
+      "load_seconds": 1.4,
+      "error": null,
+      "kind": "table",
+      "heading": "",
+      "columns": [
+        "S/N",
+        "STORE",
+        "WAREHOUSE",
+        "REQUESTED",
+        "STATUS"
+      ],
+      "total": null,
+      "rows": 1,
+      "sort_keys": [],
+      "filters": [],
+      "has_pagination": false,
+      "view_href": null,
+      "vue_view": false,
+      "add_button": null
     }
   ]
 }

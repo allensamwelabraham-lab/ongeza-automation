@@ -465,6 +465,8 @@ def check_create_form_rejects_empty(driver, app, module):
         return (d.current_url != url_before or validation_shown(d)
                 or any(r["url"] and r["status"] for r in server_responses(d)))
     wait_until(driver, answered, timeout=60)
+    # Submit ikishajibiwa, subiri ukurasa umalize kuonyesha matokeo (validation / redirect / toast)
+    wait_until(driver, lambda d: validation_shown(d) or d.current_url != url_before, timeout=15)
     time.sleep(2)
 
     server = describe_server_responses(driver)
@@ -482,6 +484,11 @@ def check_create_form_rejects_empty(driver, app, module):
             return
         pytest.fail(f"{module['name']}: form tupu imekubaliwa na kusave, ukurasa umeenda "
                     f"{driver.current_url} (server: {server})")
+    crashed = [r for r in server_responses(driver)
+               if r.get("status", 0) >= 500 or re.search(r"SQLSTATE|Integrity constraint", r.get("body") or "", re.I)]
+    if crashed:
+        pytest.fail(f"{module['name']}: form tupu imeleta error ya server badala ya validation "
+                    f"(server: {server})")
     if _server_says_saved(driver):
         pytest.fail(f"{module['name']}: form tupu imesaviwa na server (server: {server})")
     if shown:
