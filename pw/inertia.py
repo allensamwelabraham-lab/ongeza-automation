@@ -134,14 +134,21 @@ def is_empty(value):
     return value is None or (isinstance(value, str) and value.strip() in ("", "-", "--"))
 
 
-def order_problem(values, descending):
-    """None kama values zimepangwa (zikiacha tupu); vinginevyo maelezo ya jozi ya kwanza iliyokosewa."""
-    keys = [(v, sort_key(v)) for v in values if not is_empty(v)]
-    kinds = {k[0] for _, k in keys}
-    if len(kinds) > 1:  # mchanganyiko (namba na maandishi): linganisha kama maandishi
-        keys = [(v, (2, str(v).strip().casefold())) for v, _ in keys]
+def _first_break(keys, descending):
     for i in range(1, len(keys)):
         before, after = keys[i - 1][1], keys[i][1]
         if (after > before) if descending else (after < before):
             return f"'{keys[i - 1][0]}' kisha '{keys[i][0]}' (nafasi {i}-{i + 1})"
     return None
+
+
+def order_problem(values, descending):
+    """None kama values zimepangwa (zikiacha tupu); vinginevyo maelezo ya jozi ya kwanza iliyokosewa.
+    Database inaweza kupanga namba zilizohifadhiwa kama maandishi ('7' > '638'): hiyo pia inakubalika."""
+    keys = [(v, sort_key(v)) for v in values if not is_empty(v)]
+    if len({k[0] for _, k in keys}) > 1:  # mchanganyiko (namba na maandishi): linganisha kama maandishi
+        keys = [(v, (2, str(v).strip().casefold())) for v, _ in keys]
+    problem = _first_break(keys, descending)
+    if problem and not _first_break([(v, str(v).strip().casefold()) for v, _ in keys], descending):
+        return None
+    return problem

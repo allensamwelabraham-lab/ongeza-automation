@@ -107,6 +107,13 @@ def check_sort_all_columns(page, app, module):
                 values = [r[col] for r in table_data(page, "vue") if len(r) > col]
                 source = f"column '{columns[col]}'"
             problem = inertia.order_problem(values, descending)
+            col = _column_for(columns, label, attr)
+            if problem and source.startswith("data") and col is not None:
+                # Data ya '{attr}' inaweza kuwa id (k.m. category_id) wakati table inaonyesha jina: angalia table
+                open_page(page, app, url)
+                shown = [r[col] for r in table_data(page, "vue") if len(r) > col]
+                if shown and not inertia.order_problem(shown, descending):
+                    problem, values, source = None, shown, f"column '{columns[col]}'"
             if problem:
                 problems.append(f"Sort '{label}' {direction} haijapanga ({source}): {problem}")
             else:
@@ -189,6 +196,10 @@ def check_pagination_data(page, app, module):
         pytest.skip(f"{module['name']}: records {first.total}, page 1 tu")
     per = len(first.rows)
     problems, notes = [], []
+    if not (first.total - per * (first.page_count - 1)) in range(1, per + 1):
+        problems.append(f"page 1 ina records {per}, lakini jumla {first.total} kwa pages {first.page_count} "
+                        f"haziendani (zingekuwa takriban {-(-first.total // first.page_count)} kwa page)")
+        _finish(module, "pagination", problems, notes)
     for number in sorted({2, first.page_count}):
         status, props = inertia.fetch(page, inertia.with_params(page.url, page=number), data.get("version"))
         result = inertia.find_listing(props) if props else None
@@ -535,6 +546,7 @@ def check_view_matches_row(page, app, module):
     if not rows:
         pytest.skip(f"{module['name']}: table haina records")
     row = rows[0]
+    before_view = page.url
     mark_dirty(page)
     if kind == "grid":
         link = page.locator("table tbody tr").first.locator("a[href*='/view'], a[href$='/details']").first
@@ -569,8 +581,17 @@ def check_view_matches_row(page, app, module):
              if c and len(c) >= 3 and i < len(columns) and not _ACTION_COLUMNS.match(columns[i].strip())]
     missing = [f"{name}='{value}'" for name, value in cells if value.lower() not in text]
     found = len(cells) - len(missing)
-    if cells and found * 2 < len(cells):
-        problems.append(f"View haionyeshi taarifa za row: {found}/{len(cells)} zinaonekana; hazipo: {missing[:5]}")
+    # Jina la record (column ya kwanza yenye 'name', au ya kwanza ya maandishi) ndilo ushahidi mkuu
+    named = [(n, v) for n, v in cells if "name" in n.lower()] or [
+        (n, v) for n, v in cells if not re.match(r"^[\d,.\s:-]+$", v)]
+    key_missing = bool(named) and named[0][1].lower() not in text
+    related_list = page.url != before_view and page.locator("div.ongeza-toolbar, .grid-view").count() > 0
+    if related_list:
+        notes.append(f"View inafungua list inayohusiana ({page.url}), si ukurasa wa record moja: "
+                     f"taarifa {found}/{len(cells)} za row zinaonekana")
+    elif cells and key_missing and found * 2 < len(cells):
+        problems.append(f"View haionyeshi record ya row: {named[0][0]}='{named[0][1]}' haipo, na {found}/{len(cells)} "
+                        f"tu ya taarifa zinaonekana; hazipo: {missing[:5]}")
     else:
         notes.append(f"View ({page.url}) inaonyesha {found}/{len(cells)} ya taarifa za row"
                      + (f"; hazipo: {missing[:3]}" if missing else ""))
