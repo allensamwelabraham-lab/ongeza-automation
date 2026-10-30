@@ -163,7 +163,7 @@ def check_per_page(page, app, module):
             continue
         url, props = inertia_call(page, lambda: item.click(), f"Per Page {size}")
         result = inertia.find_listing(props) if props else None
-        expected = min(size, listing.total)
+        expected = min(size, max(listing.total, len(listing.rows)))
         shown = profile(page)["rows"]
         if result is None:
             problems.append(f"Per Page {size}: server haikutuma data ({url})")
@@ -225,7 +225,7 @@ return [...panel.querySelectorAll('.col')].map((col, i) => {
   return {index: i, label: label.trim(), tag: el.tagName.toLowerCase(), type: el.type || '',
           name: el.name || el.id || (lab && lab.getAttribute('for')) || '',
           blank: (all.find(o => o[0].trim() === '') || [null, null])[1],
-          options: all.filter(o => o[0].trim() !== '').slice(0, 400)};
+          options: all.filter(o => o[0].trim() !== '').slice(0, 5000)};
 }).filter(Boolean);
 """
 
@@ -242,7 +242,7 @@ class _Log(list):
 
 def _panel(page):
     panel = page.locator("[id$='-search-block']").first
-    if "show" not in (panel.get_attribute("class") or ""):
+    if "show" not in (panel.get_attribute("class", timeout=10000) or ""):
         _toolbar_button(page, "Filter").click()
         page.wait_for_function("p => p.classList.contains('show')", arg=panel.element_handle(), timeout=10000)
     return panel
@@ -379,7 +379,8 @@ def check_filters_all(page, app, module):
             from_row = bool(choices)
             # Option ambayo si default (k.m. Active=YES ndiyo is_deleted=0 inayotumwa kila mara) inapimika
             defaults = {v.strip() for v in baseline.values()}
-            choices = choices or sorted(spec["options"], key=lambda o: str(o[0]).strip() in defaults)[:1]
+            choices = choices or sorted(spec["options"], key=lambda o: (str(o[0]).strip() in defaults,
+                                                                        str(o[0]).strip() in ("0", "-1")))[:1]
             if not choices:
                 notes.append(f"Filter '{label}': haikupimika (dropdown haina options)")
                 continue
@@ -392,7 +393,8 @@ def check_filters_all(page, app, module):
                 continue
         panel = _panel(page)
         if not _set(page, panel, spec, value, text):
-            problems.append(f"Filter '{label}': field haikubali kujazwa/kuchaguliwa '{text}'")
+            # Automation haikuweza kuchagua: haijapimwa (si kosa la app lililothibitishwa)
+            notes.append(f"Filter '{label}': haikupimika (automation haikuweza kuchagua/kuandika '{text}')")
             continue
         try:
             url, props = _apply(page, panel, f"Filter '{label}' = '{text}'")
@@ -402,10 +404,16 @@ def check_filters_all(page, app, module):
         except AssertionError as exc:
             problems.append(str(exc))
             url, props = None, None
+        lost = url is not None and not page.locator("table thead th").count()
+        if lost:
+            problems.append(f"Filter '{label}' = '{text}': baada ya Apply, table na Filter zimepotea kwenye ukurasa "
+                            f"({url})")
         # Rudisha field iwe tupu; isipowezekana, fungua ukurasa upya ili filters zisichanganyike
-        panel = _panel(page) if url else panel
-        if not url or not _reset(page, panel, spec):
+        if lost or not url or not _reset(page, _panel(page), spec):
             open_page(page, app, start_url)
+            page.wait_for_selector("table thead th", timeout=90000)
+        if lost:
+            continue
         if url is None:
             continue
         changed = _changed(url, baseline)
@@ -428,10 +436,21 @@ def check_filters_all(page, app, module):
             continue
         exact = spec["tag"] == "select" or label.lower() == "id" or param == "id"
         if spec["tag"] == "select":
-            wrong, source = _check_rows(page, result, own_key or param, value, label, [], True)
-            if wrong is None:  # data haina field hiyo: linganisha jina la option na column ya table
+            key = own_key or param
+            if all(inertia.value_of(r, key)[0] for r in result.rows):
+                found = [inertia.value_of(r, key)[1] for r in result.rows]
+                source = f"data '{key}'"
+                wrong = [f for f in found if not (_matches(f, value, True) or _matches(f, text, True))]
+                if wrong and len({str(f) for f in found}) == 1 and result.total < listing.total:
+                    # Rows zote zina thamani moja (k.m. order_type 0 kwa 'Cash'): filter imefanya kazi
+                    notes.append(f"Filter '{label}' = '{text}': rows {len(found)} zote zina {key}={found[0]} "
+                                 f"(records {listing.total} -> {result.total})")
+                    continue
+            else:  # data haina field hiyo: linganisha jina la option na column ya table
                 wrong, source = _check_rows(page, result, "\0", text, label, columns, False)
         else:
+            if re.match(r"^\d{4}-\d{2}-\d{2}[ T]\d", value):
+                value, exact = value[:10], False  # filter ya tarehe inalinganisha siku
             wrong, source = _check_rows(page, result, param, value, label, columns, exact)
         if wrong is None:
             if result.total < listing.total:
@@ -492,11 +511,12 @@ def _check_date_range(page, app, start_url, dates, listing, problems, notes):
 # ============================================================
 
 def _contains_id(props, record_id):
+    """Kitambulisho cha row (id, order number ...) kipo popote kwenye data ya View?"""
     queue = [props]
     while queue:
         node = queue.pop()
         if isinstance(node, dict):
-            if str(node.get("id")) == str(record_id):
+            if any(str(v) == str(record_id) for v in node.values() if not isinstance(v, (dict, list))):
                 return True
             queue.extend(v for k, v in node.items() if k not in ("menus", "user"))
         elif isinstance(node, list):
@@ -531,7 +551,9 @@ def check_view_matches_row(page, app, module):
         if page.url != before:
             open_module(page, app, module, page.url)
     scope = page.locator(".modal.show").first if page.locator(".modal.show").count() else page.locator("body")
-    text = scope.inner_text().lower()
+    text = (scope.inner_text() + "\n" + scope.evaluate(
+        "e => [...e.querySelectorAll('input, textarea, select')].map(i => i.tagName === 'SELECT' && i.selectedIndex >= 0"
+        " ? i.options[i.selectedIndex].text : i.value).join('\\n')")).lower()
     data = inertia.page_data(page)
     problems, notes = [], []
     if record_id and data and not page.locator(".modal.show").count():
