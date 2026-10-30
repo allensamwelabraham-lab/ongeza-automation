@@ -382,6 +382,9 @@ def vue_open_filter(driver):
     return panel
 
 
+FILTER_TIMEOUT = 60  # sekunde za kusubiri jibu la Apply Filter
+
+
 def vue_filter_text(driver, label, value):
     """Jaza filter ya maandishi (kwa label) kisha 'Apply Filter'."""
     vue_filter_inputs(driver, {label: value})
@@ -417,8 +420,16 @@ def vue_filter_inputs(driver, values):
                 field, value,
             )
     before = table_data(driver, "vue")
+    started = driver.execute_script(INERTIA_TRACK_JS)
     click(driver, panel.find_element(By.XPATH, ".//button[contains(normalize-space(),'Apply Filter')]"))
-    wait_vue_reload(driver, before)
+    # Subiri ombi la filter liishe (staging ni nzito). Table ikisomwa mapema ingeonyesha rows za
+    # zamani, na filter isiyolingana ingeonekana "bado inaonyesha rows".
+    # Ukurasa usiotumia Inertia: ombi halionekani, kwa hiyo subiri table ibadilike kama zamani.
+    if wait_until(driver, lambda d: _inertia_state(d)["started"] > started, timeout=5):
+        wait_until(driver, lambda d: _inertia_state(d)["busy"] == 0, timeout=FILTER_TIMEOUT)
+        time.sleep(0.5)
+    else:
+        wait_vue_reload(driver, before)
 
 
 def vue_reset_filter(driver):

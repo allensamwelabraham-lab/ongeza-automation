@@ -219,7 +219,8 @@ def run_pytest(app_key, modules, xml_path, crud, workers=1, include_skipped=True
     if os.environ.get("RUN_BUTTONS") != "1":  # test ya buttons ni ndefu: --buttons tu
         expr = f"({expr}) and not test_all_buttons"
 
-    env = dict(os.environ, INCLUDE_SKIPPED="1" if include_skipped else "0")
+    env = dict(os.environ, INCLUDE_SKIPPED="1" if include_skipped else "0",
+               MODULE_IDS=",".join(m["id"] for m in modules))
     if crud:
         env["RUN_CRUD"] = "1"
     if edit_real:
@@ -234,7 +235,11 @@ def run_pytest(app_key, modules, xml_path, crud, workers=1, include_skipped=True
     if workers > 1:
         cmd += ["-n", str(workers)]
     print("\n" + " ".join(cmd if len(expr) < 300 else cmd[:5] + ["<modules %d>" % len(modules)] + cmd[6:]) + "\n")
+    # XML ya run iliyopita isisomwe kama matokeo mapya ikiwa pytest itakufa kabla ya kuandika yake
+    xml_path.unlink(missing_ok=True)
     subprocess.run(cmd, cwd=ROOT, env=env)
+    if not xml_path.exists():
+        sys.exit(f"pytest haikuandika matokeo ({xml_path}); ripoti haijabadilishwa na hakuna kilichotumwa.")
 
 
 # --tests: majina mafupi -> function za tests
