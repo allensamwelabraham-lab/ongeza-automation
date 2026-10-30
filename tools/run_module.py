@@ -88,6 +88,31 @@ CASES = {
         "1. Fungua module\n2. Filter kwa thamani isiyokuwepo, Apply",
         "Table haionyeshi row yoyote",
     ),
+    "test_sort_all_columns": (
+        "Sort kwa kila column (ASC na DESC)",
+        "1. Fungua module\n2. Kwa kila column inayopangika: sort ASC, kisha DESC\n3. Linganisha na data ya server",
+        "Kila column inapangwa sawasawa ASC na DESC",
+    ),
+    "test_filters_all": (
+        "Filters zote (maandishi, dropdown, tarehe)",
+        "1. Fungua module\n2. Kwa kila field ya Filter: weka thamani ya record iliyopo, Apply\n3. Linganisha rows",
+        "Kila filter inatumwa kwa server na rows zote zinazorudi zinalingana nayo",
+    ),
+    "test_per_page": (
+        "Per Page (10 na 50)",
+        "1. Fungua module\n2. Per Page 10\n3. Per Page 50",
+        "Table inaonyesha idadi ya rows uliyochagua (au records zote kama ni chache)",
+    ),
+    "test_pagination_data": (
+        "Pagination kwa data (page 2 na ya mwisho)",
+        "1. Fungua module\n2. Omba page 2 na page ya mwisho",
+        "Kila page ina idadi sahihi ya records na hakuna record inayojirudia",
+    ),
+    "test_view_matches_row": (
+        "View inaonyesha record ya row",
+        "1. Fungua module\n2. Bofya View ya row ya kwanza\n3. Linganisha taarifa",
+        "View inafungua record ileile (id) na inaonyesha taarifa za row",
+    ),
     "test_view": (
         "Kufungua detail (View) ya record",
         "1. Fungua module\n2. Bofya record ya kwanza",
@@ -256,6 +281,8 @@ TEST_ALIASES = {
     "add": "test_create_form_saves", "create": "test_create_form_saves", "crud": None,
     "buttons": "test_all_buttons", "sort": "test_sort", "filter": "test_filter_finds_row or test_filter_no_match",
     "view": "test_view", "read": "test_view", "empty": "test_create_form_rejects_empty", "page": "test_page_loads", "pagination": "test_pagination",
+    "sortall": "test_sort_all_columns", "filters": "test_filters_all", "perpage": "test_per_page",
+    "data": "test_sort_all_columns or test_filters_all or test_per_page or test_pagination_data or test_view_matches_row",
 }
 
 

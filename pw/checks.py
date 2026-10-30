@@ -10,6 +10,7 @@ import pytest
 
 from core.list_checks import NO_MATCH, _norm, _text_filter, actual
 from core.pages import column_index, is_sorted, with_query
+from pw import inertia
 from pw.pages import (
     NotTested,
     grid_filter,
@@ -51,6 +52,13 @@ def check_columns(page, app, module):
 
 def check_records(page, app, module):
     info = open_module(page, app, module)
+    data = inertia.page_data(page)
+    listing = inertia.find_listing(data["props"]) if data else None
+    if listing:
+        # Kurasa za Inertia: idadi halisi kutoka kwa server, si kutoka maandishi ya ukurasa
+        info["total"] = listing.total
+        assert len(listing.rows) == info["rows"], (
+            f"{module['name']}: server imetuma records {len(listing.rows)} lakini table inaonyesha rows {info['rows']}")
     if (module.get("rows") or 0) > 0 and info["rows"] == 0:
         pytest.skip(f"{module['name']}: table haina records sasa (ilikuwa na rows {module['rows']})")
     if info["total"] is not None:

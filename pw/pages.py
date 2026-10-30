@@ -81,8 +81,8 @@ def _is_inertia(response):
     return response.request.headers.get("x-inertia") == "true"
 
 
-def wait_inertia(page, action, what):
-    """Fanya action (k.m. bofya Sort) na usubiri jibu la Inertia linalofuata. Inarudisha props mpya."""
+def inertia_call(page, action, what):
+    """Fanya action (k.m. bofya Sort) na usubiri jibu la Inertia linalofuata. Inarudisha (url ya ombi, props mpya)."""
     try:
         with page.expect_response(_is_inertia, timeout=REQUEST_TIMEOUT * 1000) as info:
             action()
@@ -97,9 +97,14 @@ def wait_inertia(page, action, what):
     # Vue inachora upya baada ya jibu: subiri frame mbili
     page.evaluate("() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))")
     try:
-        return response.json().get("props")
+        return response.url, response.json().get("props")
     except Exception:
-        return None
+        return response.url, None
+
+
+def wait_inertia(page, action, what):
+    """Kama inertia_call, lakini inarudisha props tu."""
+    return inertia_call(page, action, what)[1]
 
 
 # ============================================================
@@ -107,7 +112,15 @@ def wait_inertia(page, action, what):
 # ============================================================
 
 def _toolbar_button(page, label):
-    return page.locator(f"div.ongeza-toolbar button:has-text('{label}')").first
+    button = page.locator(f"div.ongeza-toolbar button:has-text('{label}')").first
+    try:
+        button.wait_for(state="visible", timeout=10000)
+    except Exception:
+        heading = page.locator("h1, h2, h3, .card-header, .panel-heading").first
+        seen = heading.inner_text(timeout=2000).strip() if heading.count() else ""
+        raise AssertionError(f"Button '{label}' haipo kwenye toolbar ({page.url}); ukurasa unaonyesha "
+                             f"'{seen[:60]}' bila table") from None
+    return button
 
 
 def _sort_is(page, key, direction=None):
