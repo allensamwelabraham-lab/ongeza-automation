@@ -130,7 +130,9 @@ class Client:
                     return json.loads(raw) if raw else {}
             except urlerror.HTTPError as e:
                 raw = e.read()
-                retry = e.code == 429 or e.code >= 500
+                # POST/PUT/DELETE zinarudiwa kwa 429 tu: 5xx inaweza kuja baada ya server kusave,
+                # na kurudia kungeunda nakala (results mbili za scenario moja)
+                retry = e.code == 429 or (e.code >= 500 and method == "GET")
                 if retry and attempt < RETRIES:
                     wait = e.headers.get("Retry-After")
                     time.sleep(min(float(wait), 30) if wait and wait.isdigit() else 2 ** attempt)
@@ -141,7 +143,7 @@ class Client:
                     payload = {"message": raw[:200].decode(errors="replace")}
                 raise ApiError(e.code, payload.get("message") or f"HTTP {e.code}", payload.get("errors"))
             except (urlerror.URLError, TimeoutError, ConnectionError) as e:
-                if attempt < RETRIES:
+                if attempt < RETRIES and method == "GET":
                     time.sleep(2 ** attempt)
                     continue
                 raise ApiError(0, f"Haiwezi kufikia {self.base}: {getattr(e, 'reason', e)}")
@@ -334,7 +336,7 @@ class Pusher:
         self.fake_id = 0
         self.created = {k: 0 for k in ("project", "module", "sub_module", "feature", "scenario",
                                        "expectation", "test")}
-        self.results = {"created": 0, "replaced": 0, "Pass": 0, "Fail": 0, "skipped": 0}
+        self.results = {"created": 0, "replaced": 0, "dropped": 0, "Pass": 0, "Fail": 0, "skipped": 0}
         self.img = {"sent": 0, "failed": 0}
         self.failures = []
         self.image_error = None
@@ -491,6 +493,15 @@ class Pusher:
             return self.c.data("POST", "/tests-results/create", data=payload)
         return self.c.data("PUT", f"/tests-results/{keep['uuid']}/edit", data=payload)
 
+    def drop_carried(self, scenario_id):
+        """Futa result iliyonakiliwa kutoka test iliyopita: bila hivyo test ambayo haikumaliza
+        ingeonekana Pass ya zamani badala ya "Not tested"."""
+        if self.dry:
+            return
+        for r in self.test_rows.pop(str(scenario_id), None) or []:
+            if self._delete(r):
+                self.results["dropped"] += 1
+
     def _delete(self, row):
         try:
             self.c.data("DELETE", f"/tests-results/{row['uuid']}/delete")
@@ -550,6 +561,8 @@ class Pusher:
                 if scenario_id in self.done_scenarios or status == "ERROR":
                     # ERROR: test haikumaliza (browser/muda), si Pass wala Fail. Scenario ipo bila
                     # result, kwa hiyo project tester inaionyesha kama "Not tested".
+                    if status == "ERROR" and scenario_id not in self.done_scenarios:
+                        self.drop_carried(scenario_id)
                     counts["skip"] += 1
                     self.results["skipped"] += status == "ERROR"
                     continue
@@ -587,6 +600,8 @@ class Pusher:
         word = "Results zitakazotumwa" if self.dry else "Results zilizotumwa"
         print(f"{word}: {r['created']} (Pass {r['Pass']}, Fail {r['Fail']}), "
               f"zilizobadilisha carried rows {r['replaced']}, SKIP zilizorukwa {r['skipped']}")
+        if r["dropped"]:
+            print(f"Carried results za tests zilizokuwa ERROR zimefutwa (sasa Not tested): {r['dropped']}")
         if self.dry:
             print(f"Screenshots za Fail zitakazojaribiwa: {self.img['sent']}")
         else:

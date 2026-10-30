@@ -361,8 +361,13 @@ def check_filter_finds_row(driver, app, module):
     _apply_filter(driver, module, spec, value)
     filtered = table_data(driver, module["kind"])
     assert filtered, f"{module['name']}: filter {spec['label']}='{value}' haikurudisha row"
-    wrong = [r[spec["column"]] for r in filtered
-             if len(r) > spec["column"] and value.lower() not in r[spec["column"]].lower()]
+    if spec["label"].lower() == "id":
+        # ID ni thamani kamili: filter ya ID 12 isirudishe 112 wala 120
+        wrong = [r[spec["column"]] for r in filtered
+                 if len(r) > spec["column"] and r[spec["column"]].strip() != value]
+    else:
+        wrong = [r[spec["column"]] for r in filtered
+                 if len(r) > spec["column"] and value.lower() not in r[spec["column"]].lower()]
     assert not wrong, (
         f"{module['name']}: filter {spec['label']}='{value}' imerudisha rows zisizolingana: {wrong[:5]}"
     )

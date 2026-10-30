@@ -1,3 +1,5 @@
+import os
+
 import pytest
 
 from core.config import RUN_BUTTONS, RUN_CRUD, get_app
@@ -61,6 +63,22 @@ def fresh_driver():
 def pytest_collection_modifyitems(config, items):
     skip_crud = pytest.mark.skip(reason="CRUD test: weka RUN_CRUD=1 kuiendesha")
     skip_buttons = pytest.mark.skip(reason="Test ya buttons: weka RUN_BUTTONS=1 (--buttons) kuiendesha")
+
+    # tools.run_module inaweka MODULE_IDS: endesha modules hizo tu, kwa id kamili. "-k" peke yake
+    # inalinganisha sehemu ya jina, kwa hiyo crud_ticket_index ingeendesha pia crud_ticket_indexall.
+    wanted = {i for i in os.getenv("MODULE_IDS", "").split(",") if i}
+    if wanted:
+        keep, drop = [], []
+        for item in items:
+            module = getattr(item, "callspec", None) and item.callspec.params.get("module")
+            if isinstance(module, dict) and module.get("id") not in wanted:
+                drop.append(item)
+            else:
+                keep.append(item)
+        if drop:
+            config.hook.pytest_deselected(items=drop)
+            items[:] = keep
+
     for item in items:
         if "crud" in item.keywords and not RUN_CRUD:
             item.add_marker(skip_crud)
