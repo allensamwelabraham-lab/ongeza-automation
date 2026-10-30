@@ -23,6 +23,7 @@ from pw.pages import (
     _toolbar_button,
     grid_sort_url,
     inertia_call,
+    mark_dirty,
     open_module,
     open_page,
     profile,
@@ -152,6 +153,7 @@ def check_per_page(page, app, module):
     data, listing = open_listing(page, app, module)
     if not page.locator("div.ongeza-toolbar button:has-text('Per Page')").count():
         pytest.skip(f"{module['name']}: hakuna button ya Per Page")
+    mark_dirty(page)
     problems, notes = [], []
     for size in (10, 50):
         _toolbar_button(page, "Per Page").click()
@@ -241,6 +243,7 @@ class _Log(list):
 
 
 def _panel(page):
+    mark_dirty(page)
     panel = page.locator("[id$='-search-block']").first
     if "show" not in (panel.get_attribute("class", timeout=10000) or ""):
         _toolbar_button(page, "Filter").click()
@@ -532,6 +535,7 @@ def check_view_matches_row(page, app, module):
     if not rows:
         pytest.skip(f"{module['name']}: table haina records")
     row = rows[0]
+    mark_dirty(page)
     if kind == "grid":
         link = page.locator("table tbody tr").first.locator("a[href*='/view'], a[href$='/details']").first
         assert link.count(), f"{module['name']}: row ya kwanza haina link ya View"

@@ -43,8 +43,14 @@ def inertia_props(page):
         return None
 
 
+def mark_dirty(page):
+    """Ukurasa umebadilishwa (sort/filter/click): test inayofuata ya module hii iufungue upya."""
+    page.clean_module = None
+
+
 def open_page(page, app, path):
     """Fungua ukurasa. Inarudisha (status ya HTTP, marker ya error au None)."""
+    mark_dirty(page)
     url = path if path.startswith("http") else app["base_url"] + path
     try:
         response = page.goto(url, wait_until="domcontentloaded", timeout=REQUEST_TIMEOUT * 1000)
@@ -59,6 +65,10 @@ def open_page(page, app, path):
 
 
 def open_module(page, app, module, path=None):
+    """Fungua module. Tests za module moja zinashiriki ukurasa (tests_pw/conftest.py): kama bado uko kama
+    ulivyofunguliwa (hakuna sort/filter/click), unatumika tena bila kuupakia upya."""
+    if not path and getattr(page, "clean_module", None) == module["id"]:
+        return profile(page)
     status, error = open_page(page, app, path or module["path"])
     assert not is_login_page(page), f"{module['name']}: imerudisha login page (session imeisha?)"
     if module.get("ignore_error_text") and error and "timeout" not in error.lower():
@@ -74,6 +84,8 @@ def open_module(page, app, module, path=None):
             error = page_error(page)
             assert error is None, f"{module['name']}: error '{error}' kwenye {page.url}"
             raise NotTested(f"{module['name']}: table haikujitokeza ndani ya sekunde {LIST_WAIT}") from None
+    if not path:
+        page.clean_module = module["id"]
     return profile(page)
 
 
@@ -83,6 +95,7 @@ def _is_inertia(response):
 
 def inertia_call(page, action, what):
     """Fanya action (k.m. bofya Sort) na usubiri jibu la Inertia linalofuata. Inarudisha (url ya ombi, props mpya)."""
+    mark_dirty(page)
     try:
         with page.expect_response(_is_inertia, timeout=REQUEST_TIMEOUT * 1000) as info:
             action()
@@ -132,6 +145,7 @@ def _sort_is(page, key, direction=None):
 
 
 def _pick_sort_item(page, item, what):
+    mark_dirty(page)
     # Menu ikiwa tayari wazi usibofye Sort (ingeifunga)
     open_ = page.evaluate("s => [...document.querySelectorAll(s)].some(e => e.getClientRects().length && "
                           "getComputedStyle(e).visibility !== 'hidden')", SORT_ITEMS)
@@ -154,6 +168,7 @@ def vue_sort(page, key, direction):
 
 def vue_filter(page, label, value):
     """Jaza filter ya maandishi (kwa label au placeholder) kisha Apply Filter na subiri jibu la server."""
+    mark_dirty(page)
     panel = page.locator("[id$='-search-block']").first
     if "show" not in (panel.get_attribute("class") or ""):
         _toolbar_button(page, "Filter").click()
@@ -179,6 +194,7 @@ def grid_sort_url(page, key, descending=False):
 
 
 def grid_filter(page, name, value):
+    mark_dirty(page)
     field = page.locator(f".grid-view tr.filters [name='{name}']").first
     field.fill(value)
     try:

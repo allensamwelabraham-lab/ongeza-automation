@@ -15,6 +15,7 @@ from pw.pages import (
     NotTested,
     grid_filter,
     grid_sort_url,
+    mark_dirty,
     open_module,
     profile,
     table_data,
@@ -24,6 +25,7 @@ from pw.pages import (
 
 
 def check_page_loads(page, app, module):
+    mark_dirty(page)  # muda wa kuload unapimwa kwa kuufungua upya
     start = time.time()
     info = open_module(page, app, module)
     seconds = time.time() - start
@@ -153,6 +155,7 @@ def check_filter_no_match(page, app, module):
 
 def check_view(page, app, module):
     open_module(page, app, module)
+    mark_dirty(page)
     if module["kind"] in ("grid", "spa"):
         link = page.locator("table tbody a[href*='/view'], table tbody a[href$='/details']").first
         assert link.count(), f"{module['name']}: link ya view haipo"

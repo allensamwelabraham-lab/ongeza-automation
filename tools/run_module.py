@@ -265,6 +265,8 @@ def run_pytest(app_key, modules, xml_path, crud, workers=1, include_skipped=True
     ]
     if workers > 1:
         cmd += ["-n", str(workers)]
+        if engine == "pw":
+            cmd += ["--dist", "loadgroup"]  # tests za module moja kwa worker mmoja (zinashiriki ukurasa)
     if engine == "pw":
         cmd += ["--reruns", "1", "--only-rerun", "NotTested", "--only-rerun", "TimeoutError"]
     print("\n" + " ".join(cmd if len(expr) < 300 else cmd[:5] + ["<modules %d>" % len(modules)] + cmd[6:]) + "\n")
