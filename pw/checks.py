@@ -57,6 +57,8 @@ def check_records(page, app, module):
     if listing:
         # Kurasa za Inertia: idadi halisi kutoka kwa server, si kutoka maandishi ya ukurasa
         info["total"] = listing.total
+        assert listing.total >= len(listing.rows), (
+            f"{module['name']}: server inasema jumla ya records ni {listing.total} lakini imetuma {len(listing.rows)}")
         assert len(listing.rows) == info["rows"], (
             f"{module['name']}: server imetuma records {len(listing.rows)} lakini table inaonyesha rows {info['rows']}")
     if (module.get("rows") or 0) > 0 and info["rows"] == 0:

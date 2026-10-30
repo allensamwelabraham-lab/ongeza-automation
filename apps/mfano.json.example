@@ -1,0 +1,11 @@
+{
+  "name": "MFUMO MPYA",
+  "base_url": "https://mfumo.mfano.com",
+  "env_prefix": "MFUMO",
+  "light_page": "/crud/ticket/index",
+  "login": {
+    "username": "input[name='LoginForm[username]']",
+    "password": "input[type=password]",
+    "submit": "button[type=submit]"
+  }
+}

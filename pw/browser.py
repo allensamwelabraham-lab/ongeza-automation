@@ -11,6 +11,12 @@ from core.config import HEADLESS, LOGIN_TIMEOUT, PAGE_LOAD_TIMEOUT, SESSIONS_DIR
 READ_POST = re.compile(r"/(list|search|index\d*|data|datatable|filter|report\w*|view|show|details|options|lookup|"
                        r"autocomplete|count|summary|stats|preview-?list)/?$", re.I)
 SAFE_METHODS = ("GET", "HEAD", "OPTIONS")
+# Login ya kawaida; app yenye login tofauti inaweka "login": {...} kwenye config yake (apps/<jina>.json)
+LOGIN_SELECTORS = {
+    "username": "input[placeholder='Username' i], input[name*='user' i], input[type=email]",
+    "password": "input[type=password]",
+    "submit": "button:has-text('Login'), button:has-text('Sign in'), button[type=submit]",
+}
 
 
 def launch(playwright):
@@ -41,12 +47,13 @@ def login(browser, app):
     context = browser.new_context(viewport={"width": 1920, "height": 1080})
     page = context.new_page()
     page.set_default_timeout(PAGE_LOAD_TIMEOUT * 1000)
-    page.goto(app["base_url"], wait_until="domcontentloaded")
-    page.fill("input[placeholder=Username]", username)
-    page.fill("input[type=password]", password)
+    page.goto(app["base_url"] + app.get("login_path", ""), wait_until="domcontentloaded")
+    selectors = {**LOGIN_SELECTORS, **(app.get("login") or {})}
+    page.locator(selectors["username"]).first.fill(username)
+    page.locator(selectors["password"]).first.fill(password)
     # Jibu la Login ndilo linaunda session; Dashboard inayofuata ni nzito, haisubiriwi
     with page.expect_response(lambda r: r.request.method == "POST", timeout=LOGIN_TIMEOUT * 1000):
-        page.click("button:has-text('Login')")
+        page.locator(selectors["submit"]).first.click()
     page.goto(app["base_url"] + app.get("light_page", "/"), wait_until="domcontentloaded")
     if is_login_page(page):
         context.close()
