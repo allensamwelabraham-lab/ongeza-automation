@@ -54,6 +54,23 @@ APPS = {
 }
 
 
+# Project mpya bila kubadilisha code: weka apps/<jina>.json (angalia apps/mfano.json.example).
+# Fields: name, base_url, env_prefix, light_page, na (kama login si ya kawaida) login: {username, password, submit}.
+def _load_app_files():
+    import json
+
+    for path in sorted((ROOT / "apps").glob("*.json")):
+        config = json.loads(path.read_text())
+        key = config.pop("key", path.stem)
+        env_url = os.getenv(f"{config.get('env_prefix', key.upper())}_URL")
+        if env_url:
+            config["base_url"] = env_url
+        APPS[key] = {**APPS.get(key, {}), **config}
+
+
+_load_app_files()
+
+
 def get_app(app_key):
     app = dict(APPS[app_key])
     app["key"] = app_key

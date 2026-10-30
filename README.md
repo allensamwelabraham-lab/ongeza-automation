@@ -233,3 +233,51 @@ kusave, na buttons hatari (Delete, Sync, Push, Pay, Approve, Send, Populate, Pro
 Export lazima ipakue file. Kila module ina muda wa juu wa dakika 6 (`BUTTONS_MODULE_SECONDS`).
 Matokeo na makosa yaliyopatikana: `reports/makosa_ya_buttons.md`.
 # ongeza-automation
+
+## Msingi mpya: Playwright (inachaguliwa yenyewe)
+
+Huhitaji kuchagua chochote: amri zilezile (`bash run.sh --app ongeza --all`, `--module`, `--failed`,
+`--push`) sasa zinatumia Playwright yenyewe kwa JUMLA na ONGEZA, kwa sababu ni ya haraka na sahihi zaidi.
+`--crud`, `--buttons` na ONGEZA PRO bado zinatumia Selenium kama mwanzo. Kulazimisha moja:
+`--engine selenium` au `--engine pw`.
+
+
+JUMLA na ONGEZA zinatumia tests zilezile (`tests_pw/`). Selenium inaendelea kufanya kazi bila `--engine pw`.
+
+```bash
+bash run.sh --app ongeza --engine pw --all --from 1 --to 10              # tests zote za list
+bash run.sh --app jumla --engine pw --all --tests data --workers 2       # hatua ya 2 tu
+bash run.sh --app jumla --engine pw --module agents
+```
+
+**Hatua ya 1** (`tests_pw/test_lists.py`): page, columns, records, pagination, sort ya UI, filter, view.
+
+**Hatua ya 2** (`tests_pw/test_data.py`, `--tests data`): inalinganisha na data halisi ya server
+(Inertia JSON ya ukurasa), si maandishi ya skrini tu:
+
+| Test | Inapima |
+|---|---|
+| `test_sort_all_columns` | Kila column ambayo server inasema inapangika, ASC na DESC |
+| `test_filters_all` | Kila field ya Filter (maandishi, dropdown, From/To): UI inatuma filter, na kila row inayorudi inalingana |
+| `test_per_page` | Per Page 10 na 50: server na table zinaonyesha idadi sahihi |
+| `test_pagination_data` | Page 2 na ya mwisho: idadi sahihi, hakuna record inayojirudia |
+| `test_view_matches_row` | View ya row ya kwanza inafungua record ileile (id) na inaonyesha taarifa zake |
+
+Majina mafupi ya `--tests`: `data`, `sortall`, `filters`, `perpage`.
+
+* Login mara moja kwa run nzima (`.sessions/<app>/pw_state.json`).
+* Write guard iko kwenye network: hakuna POST/PUT/DELETE inayotoka (isipokuwa za kusoma list).
+* Test isiyomaliza (staging haikujibu) inarudiwa mara 1; ikibaki hivyo ni **Not tested**, si Fail.
+* Test ikishindwa: screenshot ya wakati huo (`reports/screenshots/`) na trace (`reports/traces/`).
+  Fungua trace: `venv/bin/python -m playwright show-trace reports/traces/<jina>.zip`
+
+### Kutest project mpya kwa code hii hii
+
+1. Nakili `apps/mfano.json.example` kuwa `apps/<jina>.json` na ujaze `name`, `base_url`, `env_prefix`
+   (na `login` kama fomu ya login si ya kawaida).
+2. Weka `<ENV_PREFIX>_USERNAME` na `<ENV_PREFIX>_PASSWORD` kwenye `.env`.
+3. Tengeneza map ya modules: `bash run.sh` haifanyi hili, tumia `venv/bin/python -m tools.discover --app <jina> --workers 2`.
+4. Endesha: `bash run.sh --app <jina> --engine pw --all`.
+
+Tests za hatua ya 2 zinasoma kila kitu (sort, filters, pagination) kutoka kwenye ukurasa wenyewe, kwa hiyo
+app yoyote ya Inertia/Vue yenye muundo huu inapimwa bila kubadilisha code.
