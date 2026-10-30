@@ -241,6 +241,10 @@ def run_pytest(app_key, modules, xml_path, crud, workers=1, include_skipped=True
         terms += [module["id"]] + (extra_files(app_key, module) if engine == "selenium" else [])
     expr = " or ".join(terms)
     if tests:  # --tests: aina hizi za tests tu
+        if engine == "pw":
+            # Kwa list za Vue, Playwright inapima filter/pagination kwa data ya server (tests mpya)
+            extra = {"test_filter_finds_row": "test_filters_all", "test_pagination": "test_pagination_data"}
+            tests = list(dict.fromkeys(tests + [extra[t] for t in tests if t in extra]))
         expr = f"({expr}) and ({' or '.join(tests)})"
     if os.environ.get("RUN_BUTTONS") != "1":  # test ya buttons ni ndefu: --buttons tu
         expr = f"({expr}) and not test_all_buttons"
@@ -642,8 +646,9 @@ def main():
     parser.add_argument("--only", help="na --all: namba za modules tu, k.m. '6,40,116-120'")
     parser.add_argument("--failed", action="store_true",
                         help="na --all: rudia modules zilizofail kwenye run iliyopita tu")
-    parser.add_argument("--engine", choices=("selenium", "pw"), default="selenium",
-                        help="pw = msingi mpya wa Playwright (JUMLA na ONGEZA, tests za list pages kwa sasa)")
+    parser.add_argument("--engine", choices=("selenium", "pw"),
+                        help="kwa kawaida inachaguliwa yenyewe: Playwright (haraka) kwa list tests za JUMLA na "
+                             "ONGEZA; Selenium kwa --crud, --buttons na ONGEZA PRO")
     parser.add_argument("--push", action="store_true",
                         help="baada ya run, tuma matokeo kwenye project tester (tools/push_to_tester.py)")
     args = parser.parse_args()
@@ -665,12 +670,30 @@ def main():
         subprocess.run(cmd, cwd=str(ROOT))
 
 
+# Tests ambazo Playwright (tests_pw/) inazo; nyingine (forms, crud, buttons) bado ziko Selenium tu
+PW_TESTS = {"page", "pagination", "sort", "filter", "view", "read", "sortall", "filters", "perpage", "data",
+            "test_page_loads", "test_columns", "test_records", "test_pagination", "test_sort",
+            "test_filter_finds_row", "test_filter_no_match", "test_sort_all_columns", "test_filters_all",
+            "test_per_page", "test_pagination_data", "test_view_matches_row"}
+
+
+def choose_engine(args):
+    """Playwright ni ya haraka na sahihi zaidi; inatumika yenyewe pale inapoweza, bila mtumiaji kuchagua."""
+    if args.engine:
+        return args.engine
+    words = {w.strip().lower() for w in (args.tests or "").split(",") if w.strip()}
+    if args.app in ("ongeza", "jumla") and not args.crud and not args.buttons and words <= PW_TESTS:
+        return "pw"
+    return "selenium"
+
+
 def _run(args):
     if args.tests and {w.strip().lower() for w in args.tests.split(",")} & {
             "crud", "add", "create", "edit", "update", "empty"}:
         args.crud = True  # tests za kusave/kuedit zinaruka bila --crud
     if args.buttons or (args.tests and "buttons" in args.tests.lower()):
         os.environ["RUN_BUTTONS"] = "1"
+    args.engine = choose_engine(args)
 
     modules = load_all(args.app)
     app = get_app(args.app)

@@ -234,7 +234,13 @@ Export lazima ipakue file. Kila module ina muda wa juu wa dakika 6 (`BUTTONS_MOD
 Matokeo na makosa yaliyopatikana: `reports/makosa_ya_buttons.md`.
 # ongeza-automation
 
-## Msingi mpya: Playwright (`--engine pw`)
+## Msingi mpya: Playwright (inachaguliwa yenyewe)
+
+Huhitaji kuchagua chochote: amri zilezile (`bash run.sh --app ongeza --all`, `--module`, `--failed`,
+`--push`) sasa zinatumia Playwright yenyewe kwa JUMLA na ONGEZA, kwa sababu ni ya haraka na sahihi zaidi.
+`--crud`, `--buttons` na ONGEZA PRO bado zinatumia Selenium kama mwanzo. Kulazimisha moja:
+`--engine selenium` au `--engine pw`.
+
 
 JUMLA na ONGEZA zinatumia tests zilezile (`tests_pw/`). Selenium inaendelea kufanya kazi bila `--engine pw`.
 

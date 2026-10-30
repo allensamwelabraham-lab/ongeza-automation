@@ -596,7 +596,7 @@ def check_view_matches_row(page, app, module):
         (n, v) for n, v in cells if not re.match(r"^[\d,.\s:-]+$", v)]
     key_missing = bool(named) and named[0][1].lower() not in text
     related_list = page.url != before_view and page.locator("div.ongeza-toolbar, .grid-view").count() > 0
-    if related_list:
+    if related_list and key_missing:
         notes.append(f"View inafungua list inayohusiana ({page.url}), si ukurasa wa record moja: "
                      f"taarifa {found}/{len(cells)} za row zinaonekana")
     elif cells and key_missing and found * 2 < len(cells):

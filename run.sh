@@ -13,7 +13,7 @@ if ! cmp -s requirements.txt venv/.requirements; then
   cp requirements.txt venv/.requirements
 fi
 # Playwright (--engine pw) inahitaji browser yake mara moja
-if [[ " $* " == *" pw "* || " $* " == *"--engine=pw"* ]] && [ ! -f venv/.pw_browser ] && [ -z "$CHROME_BINARY" ]; then
+if [ ! -f venv/.pw_browser ] && [ -z "$CHROME_BINARY" ]; then
   echo "Inapakua browser ya Playwright (mara moja tu)..."
   venv/bin/python -m playwright install chromium
   touch venv/.pw_browser
