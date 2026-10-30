@@ -233,3 +233,19 @@ kusave, na buttons hatari (Delete, Sync, Push, Pay, Approve, Send, Populate, Pro
 Export lazima ipakue file. Kila module ina muda wa juu wa dakika 6 (`BUTTONS_MODULE_SECONDS`).
 Matokeo na makosa yaliyopatikana: `reports/makosa_ya_buttons.md`.
 # ongeza-automation
+
+## Msingi mpya: Playwright (`--engine pw`, hatua ya 1)
+
+JUMLA na ONGEZA zinatumia tests zilezile (`tests_pw/`). Kwa sasa: page, columns, records,
+pagination, sort, filter na view. Selenium inaendelea kufanya kazi bila `--engine pw`.
+
+```bash
+bash run.sh --app ongeza --engine pw --all --from 1 --to 10
+bash run.sh --app jumla --engine pw --module agents
+```
+
+* Login mara moja kwa run nzima (`.sessions/<app>/pw_state.json`).
+* Write guard iko kwenye network: hakuna POST/PUT/DELETE inayotoka (isipokuwa za kusoma list).
+* Test isiyomaliza (staging haikujibu) inarudiwa mara 1; ikibaki hivyo ni **Not tested**, si Fail.
+* Test ikishindwa: screenshot ya wakati huo (`reports/screenshots/`) na trace (`reports/traces/`).
+  Fungua trace: `venv/bin/python -m playwright show-trace reports/traces/<jina>.zip`

@@ -208,11 +208,12 @@ def pick(modules, query):
     sys.exit(1)
 
 
-def run_pytest(app_key, modules, xml_path, crud, workers=1, include_skipped=True, edit_real=False, tests=None):
+def run_pytest(app_key, modules, xml_path, crud, workers=1, include_skipped=True, edit_real=False, tests=None,
+               engine="selenium"):
     # Tests za modules hizi (id iko kwenye jina la test) + tests za mkono za modules hizo
     terms = []
     for module in modules:
-        terms += [module["id"]] + extra_files(app_key, module)
+        terms += [module["id"]] + (extra_files(app_key, module) if engine == "selenium" else [])
     expr = " or ".join(terms)
     if tests:  # --tests: aina hizi za tests tu
         expr = f"({expr}) and ({' or '.join(tests)})"
@@ -226,14 +227,21 @@ def run_pytest(app_key, modules, xml_path, crud, workers=1, include_skipped=True
     if edit_real:
         env["EDIT_REAL_RECORDS"] = "1"
 
+    path = f"tests/{app_key}"
+    if engine == "pw":
+        # Playwright: tests zilezile kwa JUMLA na ONGEZA; test isiyomaliza (staging haikujibu) inarudiwa mara 1
+        path = "tests_pw"
+        env["PW_APP"] = app_key
     cmd = [
-        sys.executable, "-m", "pytest", f"tests/{app_key}", "-k", expr, "-v",
+        sys.executable, "-m", "pytest", path, "-k", expr, "-v",
         "-p", "no:cacheprovider",
         f"--junitxml={xml_path}",
         "-o", "junit_logging=system-out",
     ]
     if workers > 1:
         cmd += ["-n", str(workers)]
+    if engine == "pw":
+        cmd += ["--reruns", "1", "--only-rerun", "NotTested", "--only-rerun", "TimeoutError"]
     print("\n" + " ".join(cmd if len(expr) < 300 else cmd[:5] + ["<modules %d>" % len(modules)] + cmd[6:]) + "\n")
     # XML ya run iliyopita isisomwe kama matokeo mapya ikiwa pytest itakufa kabla ya kuandika yake
     xml_path.unlink(missing_ok=True)
@@ -288,6 +296,10 @@ def belongs(case, app_key, module):
     return test_file in extra_files(app_key, module)
 
 
+# Test haikufika kwenye ukaguzi (browser/staging/muda): si kosa la app -> ERROR (Not tested)
+INFRA_ERRORS = ("selenium.common.exceptions.", "pw.pages.NotTested", "playwright._impl._errors.")
+
+
 def parse_results(xml_path, module, app_key):
     cases = []
     for case in ET.parse(xml_path).getroot().iter("testcase"):
@@ -306,10 +318,12 @@ def parse_results(xml_path, module, app_key):
             if node is not None:
                 status = label
                 message = _clean(node.get("message") or node.text)
-                if status == "FAIL" and message.startswith("selenium.common.exceptions."):
+                if status == "FAIL" and message.startswith(INFRA_ERRORS):
                     # Browser imekwama/muda umeisha kabla ya kufika kwenye ukaguzi: si kosa la app
                     status = "ERROR"
-                    message = "Test haikumaliza (tatizo la browser au muda): " + message.split(".")[-1]
+                    cls, _, detail = message.partition(": ")
+                    message = "Test haikumaliza (tatizo la browser au muda): " + (
+                        detail if cls.endswith("NotTested") else f"{cls.split('.')[-1]}: {detail}")
                 break
 
         title, steps, expected = CASES.get(func, (func.replace("test_", "").replace("_", " ").capitalize(), "", ""))
@@ -361,7 +375,7 @@ def write_reports(app, module, cases, out_dir, shots):
         f"- **Module:** {module['name']}",
         f"- **URL:** {url}",
         f"- **Tarehe:** {now}",
-        f"- **Matokeo:** {counts['PASS']} Pass, {counts['FAIL'] + counts['ERROR']} Fail, {counts['SKIP']} Skip",
+        f"- **Matokeo:** {counts['PASS']} Pass, {counts['FAIL']} Fail, {counts['ERROR']} Not tested, {counts['SKIP']} Skip",
         "",
         "| ID | Test case | Hatua | Matokeo yanayotarajiwa | Matokeo halisi | Status |",
         "|---|---|---|---|---|---|",
@@ -404,7 +418,7 @@ th {{ background: #f6f8fa; }}
 </style></head><body>
 <h2>Ripoti ya test: {html.escape(module['name'])}</h2>
 <p><b>App:</b> {html.escape(app['name'])} &nbsp; <b>URL:</b> <a href="{url}">{html.escape(url)}</a><br>
-<b>Tarehe:</b> {now} &nbsp; <b>Matokeo:</b> {counts['PASS']} Pass, {counts['FAIL'] + counts['ERROR']} Fail,
+<b>Tarehe:</b> {now} &nbsp; <b>Matokeo:</b> {counts['PASS']} Pass, {counts['FAIL']} Fail, {counts['ERROR']} Not tested,
 {counts['SKIP']} Skip</p>
 <table><tr><th>ID</th><th>Test case</th><th>Hatua</th><th>Matokeo yanayotarajiwa</th>
 <th>Matokeo halisi</th><th>Status</th></tr>
@@ -446,8 +460,9 @@ def write_index(app, app_key, results, base_dir):
     rows = []
     for r in results:
         m, k = r["module"], r["counts"]
-        failed = k["FAIL"] + k["ERROR"]
-        color = "#cf222e" if failed else ("#9a6700" if not r["cases"] else "#1a7f37")
+        failed = k["FAIL"]
+        state = "FAIL" if failed else ("NOT TESTED" if k["ERROR"] else ("PASS" if r["cases"] else "-"))
+        color = {"FAIL": "#cf222e", "PASS": "#1a7f37"}.get(state, "#9a6700")
         problems = "<br>".join(html.escape(f"{c['title']}: {c['actual']}")
                                for c in r["cases"] if c["status"] in ("FAIL", "ERROR"))
         if not r["cases"]:
@@ -455,8 +470,8 @@ def write_index(app, app_key, results, base_dir):
         rows.append(
             f"<tr><td>{r['number']}</td><td><a href='{m['id']}/report.html'>{html.escape(m['name'])}</a>"
             f"{' <small>(slow)</small>' if m.get('skip') else ''}</td>"
-            f"<td>{k['PASS']}</td><td>{failed}</td><td>{k['SKIP']}</td>"
-            f"<td style='color:{color};font-weight:bold'>{'FAIL' if failed else ('-' if not r['cases'] else 'PASS')}</td>"
+            f"<td>{k['PASS']}</td><td>{failed}</td><td>{k['ERROR']}</td><td>{k['SKIP']}</td>"
+            f"<td style='color:{color};font-weight:bold'>{state}</td>"
             f"<td style='font-size:12px'>{problems}</td></tr>"
         )
     bad = sum(1 for r in results if r["counts"]["FAIL"] + r["counts"]["ERROR"])
@@ -470,9 +485,9 @@ th {{ background: #f6f8fa; }}
 </style></head><body>
 <h2>{html.escape(app['name'])}: ripoti za modules</h2>
 <p><b>Tarehe:</b> {now} &nbsp; <b>Modules:</b> {len(results)} ({len(results) - bad} zimepita zote, {bad} zina fail)<br>
-<b>Test cases:</b> {total['PASS']} Pass, {total['FAIL'] + total['ERROR']} Fail, {total['SKIP']} Skip
+<b>Test cases:</b> {total['PASS']} Pass, {total['FAIL']} Fail, {total['ERROR']} Not tested, {total['SKIP']} Skip
 &nbsp; <a href="all_cases.csv">all_cases.csv</a></p>
-<table><tr><th>#</th><th>Module</th><th>Pass</th><th>Fail</th><th>Skip</th><th>Status</th><th>Kilichoshindwa</th></tr>
+<table><tr><th>#</th><th>Module</th><th>Pass</th><th>Fail</th><th>Not tested</th><th>Skip</th><th>Status</th><th>Kilichoshindwa</th></tr>
 {''.join(rows)}
 </table></body></html>
 """)
@@ -537,7 +552,7 @@ def run_all(args, app, modules):
     print(f"\n=== {app['name']}: modules {len(chosen)} (namba {first}-{last}) ===")
     tests = parse_tests(args.tests) if args.tests else None
     run_pytest(args.app, [m for _, m in chosen], xml_path, args.crud, args.workers, args.include_slow,
-               args.edit_real, tests)
+               args.edit_real, tests, args.engine)
 
     # Ripoti za range hii zinaungana na za runs zilizopita (summary.json)
     summary_path = base_dir / "summary.json"
@@ -562,8 +577,8 @@ def run_all(args, app, modules):
             out_dir = prepare_dir(base_dir / module["id"])
             cases, counts = report_module(app, args.app, module, xml_path, out_dir)
         summary[module["id"]] = {"number": number, "cases": cases, "counts": counts, "ran_at": int(time.time())}
-        failed = counts["FAIL"] + counts["ERROR"]
-        print(f"{number:4}. {module['name']:55} {counts['PASS']:3} Pass {failed:3} Fail {counts['SKIP']:3} Skip")
+        print(f"{number:4}. {module['name']:55} {counts['PASS']:3} Pass {counts['FAIL']:3} Fail "
+              f"{counts['ERROR']:3} Not tested {counts['SKIP']:3} Skip")
     summary_path.write_text(json.dumps(summary, indent=1, ensure_ascii=False))
 
     by_id = {m["id"]: m for m in modules}
@@ -571,7 +586,7 @@ def run_all(args, app, modules):
                      key=lambda r: r["number"])
     total, bad = write_index(app, args.app, results, base_dir)
     print(f"\nJumla: modules {len(results)}, {bad} zina fail; test cases {total['PASS']} Pass, "
-          f"{total['FAIL'] + total['ERROR']} Fail, {total['SKIP']} Skip")
+          f"{total['FAIL']} Fail, {total['ERROR']} Not tested, {total['SKIP']} Skip")
     print(f"Muhtasari: {base_dir / 'index.html'}\n           {base_dir / 'all_cases.csv'}")
 
 
@@ -598,6 +613,8 @@ def main():
     parser.add_argument("--only", help="na --all: namba za modules tu, k.m. '6,40,116-120'")
     parser.add_argument("--failed", action="store_true",
                         help="na --all: rudia modules zilizofail kwenye run iliyopita tu")
+    parser.add_argument("--engine", choices=("selenium", "pw"), default="selenium",
+                        help="pw = msingi mpya wa Playwright (JUMLA na ONGEZA, tests za list pages kwa sasa)")
     parser.add_argument("--push", action="store_true",
                         help="baada ya run, tuma matokeo kwenye project tester (tools/push_to_tester.py)")
     args = parser.parse_args()
@@ -650,10 +667,10 @@ def _run(args):
 
     print(f"\n=== {app['name']} > {module['name']} ({module['path']}) ===")
     xml_path = out_dir / "results.xml"
-    run_pytest(args.app, [module], xml_path, args.crud, edit_real=args.edit_real)
+    run_pytest(args.app, [module], xml_path, args.crud, edit_real=args.edit_real, engine=args.engine)
     cases, counts = report_module(app, args.app, module, xml_path, out_dir)
 
-    print(f"\n{module['name']}: {counts['PASS']} Pass, {counts['FAIL'] + counts['ERROR']} Fail, "
+    print(f"\n{module['name']}: {counts['PASS']} Pass, {counts['FAIL']} Fail, {counts['ERROR']} Not tested, "
           f"{counts['SKIP']} Skip")
     for c in cases:
         print(f"  {c['id']} [{c['status']:5}] {c['title']}: {c['actual']}")
