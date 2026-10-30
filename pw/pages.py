@@ -7,7 +7,7 @@ import re
 from core.helpers import ERROR_MARKERS
 from core.pages import ACTIVE_SORT_JS, PROFILE_JS, ROWS_JS, SORT_ITEMS, with_query
 from pw import js
-from pw.browser import is_login_page, wait_quiet
+from pw.browser import is_login_page, wait_ready
 
 LIST_WAIT = int(os.getenv("LIST_WAIT", "90"))
 REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "90"))  # sekunde za kusubiri jibu la sort/filter
@@ -51,7 +51,7 @@ def open_page(page, app, path):
     except Exception as exc:
         raise NotTested(f"ukurasa {url} haukufunguka ndani ya sekunde {REQUEST_TIMEOUT}: "
                         f"{str(exc).splitlines()[0][:150]}") from None
-    wait_quiet(page)
+    wait_ready(page)
     status = response.status if response else None
     if status in (502, 503, 504):
         raise NotTested(f"staging imejibu {status} kwa {url}")
@@ -173,4 +173,4 @@ def grid_filter(page, name, value):
             field.press("Enter")
     except Exception:
         raise NotTested(f"Filter '{name}': ukurasa haukujipakia upya ndani ya sekunde {REQUEST_TIMEOUT}") from None
-    wait_quiet(page)
+    wait_ready(page)

@@ -108,10 +108,18 @@ class WriteGuard:
         return out
 
 
-def wait_quiet(page, timeout=15):
-    """Subiri network itulie (inaweza isitulie kwenye kurasa zenye polling: hapo tunaendelea)."""
+def wait_ready(page, timeout=30):
+    """Subiri ukurasa umalize kuload na table ya vue ijae. Hatusubiri "networkidle": kurasa zenye
+    polling hazitulii kamwe, na hiyo ilikuwa inaongeza sekunde 15 kwa kila ukurasa."""
     try:
-        page.wait_for_load_state("networkidle", timeout=timeout * 1000)
+        page.wait_for_load_state("load", timeout=timeout * 1000)
+    except Exception:
+        pass
+    try:
+        page.wait_for_function(
+            "() => !document.querySelector('.ongeza-toolbar') || "
+            "!!document.querySelector('table.ongeza-table tbody tr, .ongeza-record-count b')",
+            timeout=15000)
     except Exception:
         pass
 
